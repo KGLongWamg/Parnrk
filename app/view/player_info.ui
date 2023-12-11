@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>2280</width>
-    <height>1383</height>
+    <width>1277</width>
+    <height>1239</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1277</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -19,22 +31,22 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>30</y>
+     <x>100</x>
+     <y>40</y>
      <width>1121</width>
-     <height>1151</height>
+     <height>1141</height>
     </rect>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>0</height>
+     <width>1121</width>
+     <height>1141</height>
     </size>
    </property>
    <widget class="QWidget" name="verticalWidget_2" native="true">
@@ -756,6 +768,11 @@
           <item/>
           <item/>
           <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
          </widget>
         </widget>
         <widget class="QWidget" name="widget_16" native="true">
@@ -796,6 +813,11 @@
             <height>12</height>
            </rect>
           </property>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
           <item/>
           <item/>
           <item/>
@@ -896,6 +918,11 @@
           <item/>
           <item/>
           <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
          </widget>
         </widget>
         <widget class="QWidget" name="widget_23" native="true">
@@ -966,6 +993,11 @@
           <item/>
           <item/>
           <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
          </widget>
         </widget>
         <widget class="HorizontalPipsPager" name="page0">
@@ -977,6 +1009,11 @@
            <height>12</height>
           </rect>
          </property>
+         <item/>
+         <item/>
+         <item/>
+         <item/>
+         <item/>
          <item/>
          <item/>
          <item/>
@@ -1725,6 +1762,11 @@
           <item/>
           <item/>
           <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
          </widget>
         </widget>
         <widget class="QWidget" name="widget_27" native="true">
@@ -1765,6 +1807,11 @@
             <height>12</height>
            </rect>
           </property>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
           <item/>
           <item/>
           <item/>
@@ -1865,6 +1912,11 @@
           <item/>
           <item/>
           <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
          </widget>
         </widget>
         <widget class="QWidget" name="widget_29" native="true">
@@ -1935,6 +1987,11 @@
           <item/>
           <item/>
           <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
+          <item/>
          </widget>
         </widget>
         <widget class="HorizontalPipsPager" name="page5">
@@ -1946,6 +2003,11 @@
            <height>12</height>
           </rect>
          </property>
+         <item/>
+         <item/>
+         <item/>
+         <item/>
+         <item/>
          <item/>
          <item/>
          <item/>
