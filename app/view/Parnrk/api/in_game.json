@@ -1,0 +1,9 @@
+{
+    "in_game": {
+        "game_puuid": {
+            "url": "https://localhost:2999/liveclientdata/allgamedata",
+            "method": "GET",
+            "description": "获得游戏里PUUID"
+        }
+    }
+}

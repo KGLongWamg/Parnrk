@@ -1,0 +1,74 @@
+{
+  "get_settings": {
+    "PutSettings": {
+      "url": "/lol-settings/v2/account/GamePreferences/input-settings",
+      "method": "GET",
+      "description": "获取用户的输入设置，如键盘和鼠标配置。"
+    },
+    "GameSettings": {
+      "url": "/lol-game-settings/v1/game-settings",
+      "method": "GET",
+      "description": "获取用户的游戏设置，如图形和音效配置。"
+    },
+    "V2_GameSettings":{
+       "url": "/lol-settings/v2/account/GamePreferences/game-settings",
+       "method": "GET",
+       "description": "获取用户的界面设置和其他如小地图大小"
+    },
+    "AudioSettings": {
+      "url": "/lol-settings/v1/local/lol-audio",
+      "method": "GET",
+      "description": "获取用户的本地音频设置。"
+    }
+  },
+  "patch_settings": {
+    "AudioSettings": {
+      "url": "/lol-settings/v1/local/lol-audio",
+      "method": "PATCH",
+      "description": "更改用户的本地音频设置。",
+      "payload": {
+        "schemaVersion": 5,
+        "data": {
+          "某个": "某值"
+        }
+      }
+    },
+    "GamePreferences": {
+      "url": "/lol-settings/v2/account/GamePreferences/game-settings",
+      "method": "PATCH",
+      "description": "更改用户的游戏偏好设置。",
+      "payload": {
+        "schemaVersion": 1,
+        "data": {
+          "General": {
+            "GameMouseSpeed": "某个值"
+          }
+        }
+      }
+    },
+    "InputSettings": {
+      "url": "/lol-settings/v2/account/GamePreferences/input-settings",
+      "method": "PATCH",
+      "description": "更改用户的输入设置。",
+      "payload": {
+        "schemaVersion": 1,
+        "data": {
+          "GameEvents": {
+            "某个键": "例如[w]"
+          }
+        }
+      }
+    },
+    "SkillReleaseOrder": {
+      "url": "/lol-game-settings/v1/game-settings",
+      "method": "PATCH",
+      "description": "更改键位设置里的技能释放顺序。打不打对钩那俩",
+      "payload": {
+        "HUD": {
+          "例如:SmartCastWithIndicator_CastWhenNewSpellSelected": false
+        }
+      }
+    }
+  }
+}
+

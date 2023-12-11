@@ -1,0 +1,21 @@
+{
+    "Material": {
+        "AcrylicBlurRadius": 40
+    },
+    "Update": {
+        "CheckUpdateAtStartUp": false
+    },
+    "Folders": {
+        "Download": "C:/Users/KGoenpiece/Downloads/PyQt-Fluent-Widgets-master/PyQt-Fluent-Widgets-master/examples/gallery/app/download",
+        "LocalMusic": []
+    },
+    "MainWindow": {
+        "DpiScale": "Auto",
+        "Language": "zh_CN",
+        "MicaEnabled": false
+    },
+    "QFluentWidgets": {
+        "ThemeColor": "#ff009faa",
+        "ThemeMode": "Light"
+    }
+}

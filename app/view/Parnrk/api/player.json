@@ -1,0 +1,42 @@
+{
+  "playerinfo": {
+    "self_info": {
+      "url": "/lol-summoner/v1/current-summoner",
+      "method": "GET",
+      "description": "个人玩家信息",
+      "return": ["displayName", "profileIconId", "puuid", "summonerId", "summonerLevel", "经验值什么的"]
+    },
+    "player_info": {
+      "url": "/lol-summoner/v2/summoners/puuid/{puuid}",
+      "method": "GET",
+      "description": "一样的",
+      "return": ["displayName", "profileIconId", "puuid", "summonerId", "summonerLevel", "经验值什么的"]
+    },
+    "name_get_puuid": {
+      "url": "/lol-summoner/v2/summoners/names",
+      "method": "POST",
+      "description": "通过大量name查询puuid和其他。提交一个名字列表",
+      "return": "不知道"
+    }
+  },
+  "player_history": {
+    "game_history": {
+      "url": "/lol-match-history/v1/products/lol/{puuid}/matches?begIndex={a}&endIndex={b}",
+      "method": "GET",
+      "description": "某玩家战绩",
+      "return": ["gameCreationDate", "gameId", "participants", "participantIdentities"]
+    }
+  },
+  "tier_by_puuid": {
+    "url": "/lol-ranked/v1/ranked-stats/{puuid}",
+    "method": "GET",
+    "description": "通过puuid查询所有排位的段位和分数。",
+    "return": ["current_tier", "division", "current_lp"],
+    "condition": "if 'queues' in session_data: queues = session_data['queues'] for queue in queues: if queue['queueType'] == 'RANKED_SOLO_5x5'"
+  },
+  "puuid_by_gameId": {
+    "url": "/lol-player-report-sender/v1/reported-players/gameId/{gameid}",
+    "method": "GET",
+    "description": "通过gameid查询该局玩家。"
+  }
+}

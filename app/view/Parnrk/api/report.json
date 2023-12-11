@@ -1,0 +1,14 @@
+ {
+    "end_of_game_reports": {
+        "url": "/lol-player-report-sender/v1/end-of-game-reports",
+        "method": "POST",
+        "description": "游戏结束举报某人,返回204是成功",
+        "payload": {
+            "gameId": "gameId",
+            "categories": "["NEGATIVE_ATTITUDE", "ASSISTING_ENEMY_TEAM", "THIRD_PARTY_TOOLS"]",
+            "comment": "comment",
+            "offenderSummonerId": "summonerId",
+            "offenderPuuid": "puuid"
+        }
+    }
+}
