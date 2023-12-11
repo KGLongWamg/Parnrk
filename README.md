@@ -23,4 +23,5 @@ https://github.com/KGLongWamg/Parnrk/archive/refs/heads/main.zip
 ```
 
 用的是pyqt5 和qtfluent 中示例界面代码改过来的。
+诚邀有能力有意向的朋友一起学习，一起开发
 目前的问题，跑不起来
