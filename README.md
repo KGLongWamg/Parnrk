@@ -14,10 +14,13 @@
 git clone https://github.com/KGLongWamg/Parnrk.git
 
 请根据网络情况如无法克隆建议开启VPN
+```
 
 方法2.下载zip解压缩
 
-```https://github.com/KGLongWamg/Parnrk/archive/refs/heads/main.zip
+```
+https://github.com/KGLongWamg/Parnrk/archive/refs/heads/main.zip
+```
 
 用的是pyqt5 和qtfluent 中示例界面代码改过来的。
 目前的问题，跑不起来
