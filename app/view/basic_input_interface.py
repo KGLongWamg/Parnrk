@@ -59,14 +59,11 @@ class BasicInputInterface(GalleryInterface):
         )
         self.setObjectName('basicInputInterface1')
 
-        try:
-            ui_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "player_info.ui")
-            self.record = uic.loadUi(ui_path)
-        except Exception as e:
-            print("Error loading UI file:", e)
-        self.addExampleCard("对局战绩", self.record,
-                            'https://github.com/zhiyiYo/PyQt-Fluent-Widgets/blob/master/examples/layout/flow_layout/demo.py',
-                            stretch=1)
+        a =os.path.abspath(__file__)
+        b =os.path.dirname(a)
+        ui_path = os.path.join(b, "player_info.ui")
+        self.record = uic.loadUi(ui_path)
+        self.addExampleCard("对局战绩", self.record.record_module,"1",stretch=1) 
 
         for i in range(10):
             setattr(self, f'scene_info{i}', QGraphicsScene())
