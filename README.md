@@ -3,7 +3,7 @@
 
 基于PYQT5进行研发
 
-## 使用方法
+## 下载方法
 
 > 环境准备： Windows or Linux
 
@@ -20,6 +20,17 @@ git clone https://github.com/KGLongWamg/Parnrk.git
 
 ```
 https://github.com/KGLongWamg/Parnrk/archive/refs/heads/main.zip
+```
+
+## 环境和框架
+```
+python 3.11
+pyqt5
+QFluentWidget
+拳头提供的lcu接口
+
+执行python setup.py
+可以安装所需的pip中的依赖包
 ```
 
 用的是pyqt5 和qtfluent 中示例界面代码改过来的。
