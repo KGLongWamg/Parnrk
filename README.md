@@ -5,8 +5,6 @@
 
 ## 下载方法
 
-> 环境准备： Windows or Linux
-
 方法1.克隆项目并安装Parnrk
 
 ```
@@ -22,16 +20,16 @@ git clone https://github.com/KGLongWamg/Parnrk.git
 https://github.com/KGLongWamg/Parnrk/archive/refs/heads/main.zip
 ```
 
-## 环境和框架
+## 运行步骤
+1. 安装并配置python 3.10环境
 ```
-python 3.11
-pyqt5
-QFluentWidget
-拳头提供的lcu接口
-
-执行python setup.py
-可以安装所需的pip中的依赖包
+	https://www.python.org/
 ```
+2. 下载依赖项 
+```
+pip install pip install -r requriements.txt
+```
+3. 运行demo.py
 
 用的是pyqt5 和qtfluent 中示例界面代码改过来的。
 诚邀有能力有意向的朋友一起学习，一起开发
