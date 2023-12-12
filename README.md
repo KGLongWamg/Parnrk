@@ -35,4 +35,12 @@ QFluentWidget
 
 用的是pyqt5 和qtfluent 中示例界面代码改过来的。
 诚邀有能力有意向的朋友一起学习，一起开发
-目前的问题，跑不起来
+
+## 代码大概
+自己写了一个Parnrk包，是用willump和客户端通信，有订阅逻辑。可以先熟悉下，使用了一个单例模式，让willump 以及和服务端通信的client 都运行在一个叫做"Thread"的loop里。
+现在是在用pyqt5写界面，用的是PyQt-Fluent-Widget中的例子界面直接更改过来的，
+"pip install PyQt-Fluent-Widgets[full]"  可pip这个
+
+我只修改了view 里面的basic_input_interface ，连接了我的Parnrk包，其他的都是原界面例子自带的。
+目前希望把查战绩功能先运行起来，目标是自动查询BP界面战绩，同时匿名化显示数据库剧组。然后进入游戏查询十个人战绩并显示英雄技能
+
