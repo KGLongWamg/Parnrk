@@ -3,10 +3,10 @@ from .model import lol_session_manager
 # 用于查人信息
 async def get_player_details(puuid = None):
     if puuid:
-        displayName, profileIconId, puuid = await lol_session_manager.player_info_puuid(puuid)
+        displayName, profileIconId, puuid,privacy = await lol_session_manager.player_info_puuid(puuid)
         return displayName, profileIconId, puuid,privacy
     else:
-        displayName, profileIconId, puuid = await lol_session_manager.player_info()
+        displayName, profileIconId, puuid,privacy = await lol_session_manager.player_info()
         return displayName, profileIconId, puuid,privacy
 
 async def get_player_rank(puuid):

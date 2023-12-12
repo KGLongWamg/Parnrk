@@ -770,11 +770,6 @@ async def get_authorization():
     data = request.get_json()
     puuid = data.get('puuid')
 
-    #query = """SELECT puuid0,puuid1,puuid2,puuid3,puuid4 FROM users where uid = uid"""
-    #result1 = await lol2.execute_single_query(query)
-    #if result1:
-        #return jsonify({"message": "白名单", "status": 200}), 200
-
     query = """
         SELECT puuid FROM user_authorization WHERE puuid = :puuid
     """

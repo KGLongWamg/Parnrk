@@ -84,8 +84,10 @@ class GameSessionManager:
 
 	# 这个是并发获得 所有玩家的信息 和50场内的单双战绩信息
 	async def handle_room_session(self, data):
-		phase = data["timer"]["phase"]
+		result = data["data"]
+		phase = result["timer"]["phase"]
 		if phase == "GAME_STARTING":
+			print("获得")
 			await asyncio.sleep(5)
 			async with aiohttp.ClientSession() as session:
 				async with session.get("https://localhost:2999/liveclientdata/allgamedata", ssl=False) as response:
@@ -112,9 +114,8 @@ class GameSessionManager:
 
 			#查询十个人战绩查询完成
 		# 重置信息和作弊名单
-		result = data["data"]
 		gameId = result["gameId"]
-
+		print(gameId)
 		if gameId in self.processed_sessions:
 			return
 		self.processed_sessions.add(gameId)  # 添加到processed_sessions = set() 防止重复查询
@@ -130,14 +131,17 @@ class GameSessionManager:
 		tasks = []
 		for player in myTeam:
 			puuid = player["puuid"]
+			print(puuid)
 			# 创建协程对象，并加入到任务列表中
 			tasks.append(self.fetch_player_data(puuid))
 
 		# 并发执行所有任务
+		print("准备执行任务1")
 		await asyncio.gather(*tasks)
+		print("任务完毕1")
 		self.control_event_1.set()  #玩家信息收集结束
 		
-		await self.post_allcrew_to_passage()
+		#await self.post_allcrew_to_passage()
 		#await asyncio.sleep(5)
 		#await self.get_allcrew_from_passage(gameId)   留着以后白名单
 		self.control_event_2.set()  #作弊信息收集结束
@@ -150,13 +154,16 @@ class GameSessionManager:
 			player_info_task = summoner_data_fetcher.fetch_player_data(puuid)
 			#这里查询puuid是否可用，是否在某个数据库，或者是否公开隐私设置，或者是否
 			displayName, profileIconId, puuid, privacy = await summoner_data_fetcher.get_player_details(puuid)
-			authorization = await authorization(puuid)
-			if privacy == "PUBLIC" and authorization:
-				rank_history_task = summoner_data_fetcher.get_player_rank_history(puuid, 0, 99)
+			rank_history_task = summoner_data_fetcher.get_player_rank_history(puuid, 0, 50)
+
+			#后面再加入授权过的puuid账号，先测试能跑起来
+			#authorization = await authorization(puuid)
+			if privacy == "PUBLIC": #or authorization:
 				player_info, rank_history = await asyncio.gather(player_info_task, rank_history_task)
 			else:
-				player_info = await player_info_task
+				player_info = await summoner_data_fetcher.fetch_player_data(puuid)
 				rank_history =None
+			print(player_info)
 			if puuid not in self.player_data:
 				self.player_data[puuid] = {}
 			# 将获取到的信息存储在字典中
@@ -164,7 +171,7 @@ class GameSessionManager:
 			self.player_data[puuid]['rank_history'] = rank_history   #玩家下方框信息
 
 		except Exception as e:
-			print("奇怪的错误")
+			print(f"奇怪的错误{e}")
 
 	#这里改动为 白名单上传暂停，下个版本改，  先改为查询自己家的作弊成员，匿名显示
 	async def post_allcrew_to_passage(self):

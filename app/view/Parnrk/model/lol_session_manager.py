@@ -108,7 +108,7 @@ async def rank_history(puuid, a, b):
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
 async def get_player_info(puuid):
 
-    displayName, profileIconId, puuid = await player_info_puuid(puuid)
+    displayName, profileIconId, puuid,privacy = await player_info_puuid(puuid)
     current_rank_data = await rank_date(puuid)
 
     if current_rank_data is not None:

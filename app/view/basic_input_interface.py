@@ -3,8 +3,9 @@ from PyQt5 import QtWidgets, uic
 import sys
 import os
 import asyncio
+import json
 from PyQt5.QtCore import Qt, QSize,QThread,pyqtSlot,pyqtSignal,QObject
-from PyQt5.QtWidgets import QAction, QWidget, QVBoxLayout, QButtonGroup,QHBoxLayout,QGraphicsView,QCompleter,QGraphicsScene
+from PyQt5.QtWidgets import QAction, QWidget, QVBoxLayout, QButtonGroup,QHBoxLayout,QGraphicsView,QCompleter,QGraphicsScene,QGraphicsTextItem,QGraphicsPixmapItem
 from qfluentwidgets import (Action, DropDownPushButton, DropDownToolButton, PushButton, ToolButton, PrimaryPushButton,
                             HyperlinkButton, ComboBox, RadioButton, CheckBox, Slider, SwitchButton, EditableComboBox,
                             ToggleButton, RoundMenu, FluentIcon, SplitPushButton, SplitToolButton, PrimarySplitToolButton,
@@ -12,42 +13,76 @@ from qfluentwidgets import (Action, DropDownPushButton, DropDownToolButton, Push
                             ToggleToolButton, TransparentDropDownPushButton, TransparentPushButton, TransparentToggleToolButton,
                             TransparentTogglePushButton, TransparentDropDownToolButton, TransparentToolButton,
                             PillPushButton, PillToolButton,FlowLayout,SearchLineEdit)
+from PyQt5.QtGui import QFont,QPixmap
 
-from Parnrk.model.api_client_manager import APIClient
-from Parnrk.utils.Singleton import wllp,Thread
-from Parnrk import subscription
+from .Parnrk.model.api_client_manager import APIClient
+from .Parnrk.utils.Singleton import wllp,Thread
+from .Parnrk import subscription
+from .Parnrk.utils.utils import get_versions,convert_time_to_string
 
 from .gallery_interface import GalleryInterface
 from ..common.translator import Translator
 
-from Parnrk import subscription
+from .Parnrk import subscription
 
 async def create_client():
     return APIClient("http://122.51.220.10:5000")
 
+
+
 class Worker(QObject):
     finished = pyqtSignal()  # 如果需要，可以添加更多信号
-
+    print("类创建了")
     def run(self):
+        print("开始1")
         # 为当前线程创建并设置新的事件循环
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-
+        print("开始2")
         # 在新的事件循环中运行异步任务
         loop.run_until_complete(self.async_task())
         loop.close()
 
     async def async_task(self):
-        asyncio.run_coroutine_threadsafe(wllp.get_instance(), loop=Thread)
+        print("开始3")
+        future = asyncio.run_coroutine_threadsafe(wllp.get_instance(), loop=Thread)
+        result = future.result()
+        print("开始4") 
         while True:
+            subscription.GameSessionManager().control_event_1.clear()
+            print("开始5")
+            future = asyncio.run_coroutine_threadsafe(subscription.start_subscription(),loop=Thread)
             future = asyncio.run_coroutine_threadsafe(subscription.GameSessionManager().control_event_1.wait(), loop=Thread)
+
+            print("开始6")
             result = future.result()
+            print("开始7")
             # 发出信号，例如更新UI等
             self.finished.emit()
+            print("开始8")
 
+class PlayerStats:
+    all_player_stats = []  # 类属性，用于存储所有玩家的统计数据
+    def add_player_data(self, puuid, champion_image_paths,kda_and_win):
+        player_data = {
+            puuid: {
+                "champion_image_paths":champion_image_paths,
+                "kda_and_win": kda_and_win,
+                "current_pages":0
+            }
+        }
+        self.all_player_stats.append(player_data)
+    def set_page(self, puuid, page):
+        for player_data in self.all_player_stats:
+            if puuid in player_data:
+                player_data[puuid]["current_pages"] = page
+                break  # 停止遍历，因为已经找到并修改了目标数据
+    def stats_pages_restart(self):
+        self.all_player_stats= []
+
+player_stats_instance =  PlayerStats()
 class BasicInputInterface(GalleryInterface):
     """ Basic input interface """
-    player_data_updated = pyqtSignal()
 
     def __init__(self, parent=None):
 
@@ -61,6 +96,12 @@ class BasicInputInterface(GalleryInterface):
 
         a =os.path.abspath(__file__)
         b =os.path.dirname(a)
+        file_path = os.path.join(b, 'Parnrk', 'champion_images', 'champion_key_name_dict.json')
+        #file_path = '.Parnrk/champion_images/champion_key_name_dict.json'
+        # 读取JSON文件并将其内容转换为Python字典
+        with open(file_path, 'r', encoding='utf-8') as file:
+            self.key_name_dict = json.load(file)
+
         ui_path = os.path.join(b, "player_info.ui")
         self.record = uic.loadUi(ui_path)
         self.addExampleCard("对局战绩", self.record.record_module,"1",stretch=1) 
@@ -71,30 +112,22 @@ class BasicInputInterface(GalleryInterface):
 
         self.thread = QThread()
         self.worker = Worker()
-        #self.player_data_updated.connect(self.update_player_stats)
         self.worker.moveToThread(self.thread)
 
-        self.worker.finished.connect(self.player_data_updated)
+        self.worker.finished.connect(self.update_player_stats)
         self.thread.started.connect(self.worker.run)
 
         self.thread.start()
 
-
-    #这个用Qthread 设置 在这个线程中wait，等待另一边的查询
-    def run(self):
-        asyncio.run_coroutine_threadsafe(create_client(), loop=Thread)
-        while True:
-            future = asyncio.run_coroutine_threadsafe(control_event_1.wait(), loop=Thread)
-            result = future.result()
-            self.player_data_updated.emit()
-
     @pyqtSlot()
     def update_player_stats(self):
+        print("进入槽函数")
         # 清除旧的场景内容
         player_data = subscription.GameSessionManager._instance.player_data
         for i, (puuid, data) in enumerate(player_data.items()):
-            self.scene_info[i].clear()
-            self.scene_record[i].clear()
+            getattr(self, f'scene_info{i}').clear()
+            getattr(self, f'scene_record{i}').clear()
+
             print("进入了玩家信息")
             try:
                 # data 是每个玩家的信息字典
@@ -105,7 +138,7 @@ class BasicInputInterface(GalleryInterface):
                 division = data['player_info']["division"]
                 current_lp = data['player_info']["current_lp"]
                 info_view = self.get_view('info',5)
-                scene_info = self.scene_info[i]
+                scene_info = getattr(self, f'scene_info{i}')
                 tier_ico_path =f"Resources/tier_icons/{current_tier}.png"
             except Exception as e:
                 print(f"An error occurred2: {e}")
@@ -128,9 +161,10 @@ class BasicInputInterface(GalleryInterface):
                 textItem.setFont(QFont("Arial", 13, QFont.Bold))
                 textItem.setDefaultTextColor(Qt.black)
                 textItem.setPos(50, 9)  # 设置文本位置
-                self.record.info[i].setScene(self.scene_info[i])
 
-                setScene(self.scene_record[i])
+                info = getattr(self.record, f'info{i}')
+                info.setScene(scene_info)
+
             except Exception as e:
                 print(f"An error occurred3: {e}")
             try:
@@ -145,7 +179,7 @@ class BasicInputInterface(GalleryInterface):
                         participants = rank_history['participants']
                         championId = participants['championId']
                         championId_str = str(championId)
-                        championName = key_name_dict[championId_str]
+                        championName = self.key_name_dict[championId_str]
                         champion_image_paths.append(f"Resources/champion_images/{championName}.png")
                         stats = participants['stats']
                         kills = stats['kills']
@@ -155,15 +189,17 @@ class BasicInputInterface(GalleryInterface):
                         text_color = '#00CC00' if win == "胜利" else '#FF0000'
                         KDA_win = f"{kills}/{deaths}/{assists}\t{win} {gameDate}"
                         KDA_and_win.append({"text": KDA_win, "color": text_color})
-
-                player_stats_instance.add_player_data(puuid, champion_image_paths,KDA_and_win)
-                #
-                self.display_images(self.scene_record[i],0, champion_image_paths, 1)
-                self.display_images(self.scene_record[i],0, KDA_and_win, 2)
-
-                self.record.record[i].setScene(self.scene_record[i])
             except Exception as e:
                 print(f"An error occurred4: {e}")
+
+            player_stats_instance.add_player_data(puuid, champion_image_paths,KDA_and_win)
+            #
+            self.display_images(getattr(self, f'scene_record{i}'),0, champion_image_paths, 1)
+            self.display_images(getattr(self, f'scene_record{i}'),0, KDA_and_win, 2)
+
+            record = getattr(self.record, f'record{i}')
+            record.setScene(getattr(self, f'scene_record{i}'))
+
 
         texts = []
         for i, (puuid, data) in enumerate(player_data.items()):
@@ -194,7 +230,7 @@ class BasicInputInterface(GalleryInterface):
         return infos
 
     #用于战绩绘图
-    def display_images(self,scene, contexts, a):
+    def display_images(self, scene, page,contexts, a):
         image_size = 35
         space_between = 7
         start_y = 3
