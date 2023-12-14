@@ -196,7 +196,8 @@ class BasicInputInterface(GalleryInterface):
                         championId = participants['championId']
                         championId_str = str(championId)
                         championName = self.key_name_dict[championId_str]
-                        champion_image_paths.append(f"Resources/champion_images/{championName}.png")
+                        champion_image_path = os.path.join(self.b, 'Parnrk', 'champion_images', f'{championName}.png')
+                        champion_image_paths.append(champion_image_path)
                         stats = participants['stats']
                         kills = stats['kills']
                         deaths = stats['deaths']
@@ -259,6 +260,10 @@ class BasicInputInterface(GalleryInterface):
                 if a == 1:
                     image_file = context
                     pixmap = QPixmap(image_file)
+                    # 缩放图像以适应指定的大小
+                    desired_width = 33
+                    desired_height = 33
+                    pixmap = pixmap.scaled(desired_width, desired_height, Qt.KeepAspectRatio)
                     pixmapItem = QGraphicsPixmapItem(pixmap)
                     pixmapItem.setPos(x, y)
                     scene.addItem(pixmapItem)
@@ -269,4 +274,5 @@ class BasicInputInterface(GalleryInterface):
                     textItem.setFont(QFont("Arial", 12, QFont.Bold))
                     textItem.setPos(x, y)
                     scene.addItem(textItem)
+
 
