@@ -10,7 +10,6 @@ from qfluentwidgets import FluentIcon as FIF
 from .gallery_interface import GalleryInterface
 from .home_interface import HomeInterface
 from .basic_input_interface import BasicInputInterface
-from .layout_interface import LayoutInterface
 from .icon_interface import IconInterface
 
 from .setting_interface import SettingInterface
