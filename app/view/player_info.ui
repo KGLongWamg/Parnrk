@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1277</width>
-    <height>1239</height>
+    <height>471</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2055,14 +2055,14 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="SwitchButton" name="Button_accept">
+      <widget class="SwitchButton" name="Button_accept" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="offText">
+       <property name="offText" stdset="0">
         <string>自动接受</string>
        </property>
       </widget>

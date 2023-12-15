@@ -1,10 +1,15 @@
 import json
 import asyncio
 import logging
+import aiohttp 
+import threading
+
 
 from .utils.Singleton import wllp
 from .model.api_client_manager import APIClient
 from . import summoner_data_fetcher
+
+from .model.lol_session_manager import names_get_puuid
 
 async def default_message_handler(data):
 	#print(data['eventType'] + ' ' + data['uri'])
@@ -82,72 +87,111 @@ class GameSessionManager:
 	def control(self, value):
 		self._control = value
 
-	# 这个是并发获得 所有玩家的信息 和50场内的单双战绩信息
+
 	async def handle_room_session(self, data):
-		result = data["data"]
-		phase = result["timer"]["phase"]
-		if phase == "GAME_STARTING":
-			print("获得")
-			await asyncio.sleep(5)
-			async with aiohttp.ClientSession() as session:
-				async with session.get("https://localhost:2999/liveclientdata/allgamedata", ssl=False) as response:
-					if response.status == 200:
-						data = await response.json()
-						allPlayers = data["allPlayers"]
-						puuid_champion_mapping = {}   #十个puuid下面是英雄name
-						for player in allPlayers:
-							summoner_name = player["summonerName"]
-							puuid = (await names_get_puuid(summoner_name)[0]["puuid"])
-							champion_name = player["championName"]
-							puuid_champion_mapping[puuid] = champion_name
 
-						return summoner_champion_mapping
-					else:
-						print(f"Error {response.status}: {await response.text()}")
-						return None
-			all_tasks = []
-			for puuid in puuid_champion_mapping:
-				self.player_data[puuid]['champion_name'] = champion_name
-				all_tasks.append(self.fetch_player_data(puuid))
+		try:
+
+
+
+
+			result = data["data"]
+			phase = result["timer"]["phase"]
+			if phase == "GAME_STARTING":
+
+				print('开始等待======================')
+				await asyncio.sleep(20)
+
+				async with aiohttp.ClientSession() as session:
+
+					#游戏进入后在本地的这个端口和路径就会生成这个json文件
+					async with session.get("https://localhost:2999/liveclientdata/allgamedata", ssl=False) as response:
+
+						if response.status == 200:
+							print('in here ')
+							data = await response.json()
+							allPlayers = data["allPlayers"]
+							puuid_champion_mapping = {}   #十个puuid下面是英雄name
+							print("len(allplayers)",len(allPlayers))
+
+							lock = asyncio.Lock()
+							for player in allPlayers:
+								summoner_name = player["summonerName"]
+								puuid_result = await names_get_puuid(summoner_name)
+								puuid = puuid_result[0]["puuid"]
+								#print('puuid is ',puuid)
+								
+								champion_name = player["championName"]
+								print('game start 英雄名字:',champion_name)
+								async with lock:
+									puuid_champion_mapping[puuid] = champion_name
+								print('add one')
+
+						else:
+							print(f"yes,Error {response.status}: {await response.text()}")
+							return None
 				
-			await asyncio.gather(*all_tasks)
+				all_tasks = []
+				print("len(puuid_champion_mapping)---",len(puuid_champion_mapping))
+				i=0
+				for puuid in puuid_champion_mapping:
+					print('--------i:',i)
+					i+=1
+					self.player_data[puuid]['champion_name'] = champion_name
+					print(puuid)
+					all_tasks.append(self.fetch_player_data(puuid))
+					
+				await asyncio.gather(*all_tasks)
 
-			#查询十个人战绩查询完成
-		# 重置信息和作弊名单
-		gameId = result["gameId"]
-		print(gameId)
-		if gameId in self.processed_sessions:
-			return
-		self.processed_sessions.add(gameId)  # 添加到processed_sessions = set() 防止重复查询
 
-		self.gameId = gameId
+				#查询十个人战绩查询完成
+			# 重置信息和作弊名单
 
-		self.cheating_players = {}  # 用于得到通道非本队的名单
-		self.player_data = {}
+			
+			gameId = result["gameId"]
+			print(gameId)
+			current_thread = threading.current_thread()
+			print('当前的线程iD====================',current_thread.ident)
+			if gameId in self.processed_sessions:
+				return
+			self.processed_sessions.add(gameId)  # 添加到processed_sessions = set() 防止重复查询
+			self.gameId = gameId
+			print('I am already here')
+			self.cheating_players = {}  # 用于得到通道非本队的名单
+			self.player_data = {}
 
-		myTeam = result["myTeam"]
-		self.player_data = {player["puuid"]: {} for player in myTeam}
+			myTeam = result["myTeam"]
+			self.player_data = {player["puuid"]: {} for player in myTeam}
 
-		tasks = []
-		for player in myTeam:
-			puuid = player["puuid"]
-			print(puuid)
-			# 创建协程对象，并加入到任务列表中
-			tasks.append(self.fetch_player_data(puuid))
+			tasks = []
+			for player in myTeam:	
+				puuid = player["puuid"]
+				print(puuid)
+				# 创建协程对象，并加入到任务列表中
+				tasks.append(self.fetch_player_data(puuid))
 
-		# 并发执行所有任务
-		print("准备执行任务1")
-		await asyncio.gather(*tasks)
-		print("任务完毕1")
-		self.control_event_1.set()  #玩家信息收集结束
-		
-		#await self.post_allcrew_to_passage()
-		#await asyncio.sleep(5)
-		#await self.get_allcrew_from_passage(gameId)   留着以后白名单
-		self.control_event_2.set()  #作弊信息收集结束
+			# 并发执行所有任务
+			print("准备执行任务1")
+			await asyncio.gather(*tasks)
+			print("任务完毕1")
+			self.control_event_1.set()  #玩家信息收集结束
+			
+			#await self.post_allcrew_to_passage()
+			#await asyncio.sleep(5)
+			#await self.get_allcrew_from_passage(gameId)   留着以后白名单
+			self.control_event_2.set()  #作弊信息收集结束
 
-		self.control = 1
+			self.control = 1
+		except Exception as e:
+			print(f"An error occurred: {e}")
+			# Optionally, re-raise the exception if you want it to propagate.
+			raise
 
+	
+	
+
+
+	
 	async def fetch_player_data(self, puuid):
 		# 并发获取玩家信息和排名历史
 		try:
@@ -223,7 +267,7 @@ async def start_subscription():
 	all_events_subscription = await wllp_get_instance.subscribe('OnJsonApiEvent',default_handler=default_message_handler)
 
 	wllp_get_instance.subscription_filter_endpoint(all_events_subscription, '/lol-matchmaking/v1/ready-check', handler=AutoGameSessionController().accept_game_automatically)
-
+	print('before /lol-champ-select/v1/session, handler=GameSessionManager().handle_room_session')
 	wllp_get_instance.subscription_filter_endpoint(all_events_subscription, '/lol-champ-select/v1/session', handler=GameSessionManager().handle_room_session)
 
 	while True:

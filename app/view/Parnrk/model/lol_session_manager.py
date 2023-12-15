@@ -39,8 +39,9 @@ async def player_info_puuid(puuid):
 
 # 查列表名字的个人信息
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
-async def name(data1):
+async def names_get_puuid(data1):
     # data1 = ["忍着胜","重谱旧曲"]
+    data1=[data1]
     summoner_datas = await (
         await ((await wllp.get_instance()).request("POST", "/lol-summoner/v2/summoners/names", data=data1))).json()
 

@@ -56,7 +56,7 @@ class Worker(QObject):
             future = asyncio.run_coroutine_threadsafe(subscription.GameSessionManager().control_event_1.wait(),
                                                       loop=Thread)
 
-            print("开始6")
+            print("开始6\n")
             result = future.result()
             print("开始7")
             # 发出信号，例如更新UI等
