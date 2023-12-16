@@ -42,9 +42,10 @@ async def player_info_puuid(puuid):
 async def names_get_puuid(data1):
     # data1 = ["忍着胜","重谱旧曲"]
     data1=[data1]
+    print('data1 is ',data1)
     summoner_datas = await (
         await ((await wllp.get_instance()).request("POST", "/lol-summoner/v2/summoners/names", data=data1))).json()
-
+    print('len(summoner_datas) is',len(summoner_datas))
     return summoner_datas  # 两个player_info字典
 
 # 查房间里的信息    里面还有 ban的过程 和秒退时间 最后更新 以及对面的情况

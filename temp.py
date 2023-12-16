@@ -65,9 +65,9 @@ async def handle_room_session(self, data):
 			print("任务完毕1")
 			self.control_event_1.set()  #玩家信息收集结束
 			
-			#await self.post_allcrew_to_passage()
-			#await asyncio.sleep(5)
-			#await self.get_allcrew_from_passage(gameId)   留着以后白名单
+			await self.post_allcrew_to_passage()
+			await asyncio.sleep(5)
+			await self.get_allcrew_from_passage(gameId)   留着以后白名单
 			self.control_event_2.set()  #作弊信息收集结束
 
 			self.control = 1

@@ -3,7 +3,7 @@ import asyncio
 import logging
 import aiohttp 
 import threading
-
+import re
 
 from .utils.Singleton import wllp
 from .model.api_client_manager import APIClient
@@ -71,7 +71,7 @@ class GameSessionManager:
 			self.processed_sessions = set()  # 放gameId 防止重复查询当前
 
 			self.initialized = True
-			self.gameId = None
+			self.gameId = None					#从程序启动开始，这个软件会遇到很多新的gameID
 
 			self._control = 0   #用于触发信号
 
@@ -92,12 +92,21 @@ class GameSessionManager:
 
 		try:
 
+			task = asyncio.current_task()
+			print(f"当前任务: {task}")
+			task_repr = str(task)
 
 
+    # 使用正则表达式提取任务编号
 
 			result = data["data"]
 			phase = result["timer"]["phase"]
 			if phase == "GAME_STARTING":
+				match = re.search(r'Task-(\d+)', task_repr)
+				match_int=int(match.group(1))
+				print('match is ',match_int)
+				if match_int%2==0:
+					return 
 
 				print('开始等待======================')
 				await asyncio.sleep(20)
@@ -108,40 +117,41 @@ class GameSessionManager:
 					async with session.get("https://localhost:2999/liveclientdata/allgamedata", ssl=False) as response:
 
 						if response.status == 200:
-							print('in here ')
 							data = await response.json()
 							allPlayers = data["allPlayers"]
 							puuid_champion_mapping = {}   #十个puuid下面是英雄name
-							print("len(allplayers)",len(allPlayers))
 
-							lock = asyncio.Lock()
+							all_tasks=[]
 							for player in allPlayers:
 								summoner_name = player["summonerName"]
 								puuid_result = await names_get_puuid(summoner_name)
 								puuid = puuid_result[0]["puuid"]
-								#print('puuid is ',puuid)
-								
+								#print('puuid is ',puuid)	
 								champion_name = player["championName"]
 								print('game start 英雄名字:',champion_name)
-								async with lock:
-									puuid_champion_mapping[puuid] = champion_name
-								print('add one')
+								if puuid in self.player_data:
+									print('本来有champion_name')
+									self.player_data[puuid]['champion_name'] = champion_name
+								else:
+									print('没有champion_name')
+									self.player_data[puuid]={}
+									self.player_data[puuid]['champion_name'] = champion_name
+								print('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=')
+								for key, value in self.player_data.items():
+									print(key)
+								print('添加到puuid的set成功',champion_name)
+								all_tasks.append(self.fetch_player_data(puuid))
+
+
+								
+							await asyncio.gather(*all_tasks)
+							self.control_event_1.set()
 
 						else:
 							print(f"yes,Error {response.status}: {await response.text()}")
 							return None
 				
-				all_tasks = []
-				print("len(puuid_champion_mapping)---",len(puuid_champion_mapping))
-				i=0
-				for puuid in puuid_champion_mapping:
-					print('--------i:',i)
-					i+=1
-					self.player_data[puuid]['champion_name'] = champion_name
-					print(puuid)
-					all_tasks.append(self.fetch_player_data(puuid))
-					
-				await asyncio.gather(*all_tasks)
+
 
 
 				#查询十个人战绩查询完成
@@ -154,15 +164,28 @@ class GameSessionManager:
 			print('当前的线程iD====================',current_thread.ident)
 			if gameId in self.processed_sessions:
 				return
+			
+			print('==========================================================================================不然图标了手动停止【======================')
 			self.processed_sessions.add(gameId)  # 添加到processed_sessions = set() 防止重复查询
 			self.gameId = gameId
 			print('I am already here')
+			print('=============================================')
+			print('=============================================')
+			print('=============================================')
 			self.cheating_players = {}  # 用于得到通道非本队的名单
 			self.player_data = {}
 
 			myTeam = result["myTeam"]
 			self.player_data = {player["puuid"]: {} for player in myTeam}
 
+			length = len(self.player_data)
+
+			print(f"字典长度: {length}")
+			print('first_time -----------player_data')
+
+			for key, value in self.player_data.items():
+				print(key, value)
+			print('first_time -----------player_data')
 			tasks = []
 			for player in myTeam:	
 				puuid = player["puuid"]
@@ -175,11 +198,12 @@ class GameSessionManager:
 			await asyncio.gather(*tasks)
 			print("任务完毕1")
 			self.control_event_1.set()  #玩家信息收集结束
-			
+			print('==========================================================================================手动停止')
+			#return
 			#await self.post_allcrew_to_passage()
 			#await asyncio.sleep(5)
-			#await self.get_allcrew_from_passage(gameId)   留着以后白名单
-			self.control_event_2.set()  #作弊信息收集结束
+			#await self.get_allcrew_from_passage(gameId)  # 留着以后白名单
+			#self.control_event_2.set()  #作弊信息收集结束
 
 			self.control = 1
 		except Exception as e:
@@ -207,9 +231,12 @@ class GameSessionManager:
 			else:
 				player_info = await summoner_data_fetcher.fetch_player_data(puuid)
 				rank_history =None
+				print(player_info['displayName'],' 不让看战绩')
+			print('player_info')
 			print(player_info)
 			if puuid not in self.player_data:
 				self.player_data[puuid] = {}
+				print('出问题了')
 			# 将获取到的信息存储在字典中
 			self.player_data[puuid]['player_info'] = player_info     #玩家上方框信息
 			self.player_data[puuid]['rank_history'] = rank_history   #玩家下方框信息
@@ -269,7 +296,7 @@ async def start_subscription():
 	wllp_get_instance.subscription_filter_endpoint(all_events_subscription, '/lol-matchmaking/v1/ready-check', handler=AutoGameSessionController().accept_game_automatically)
 	print('before /lol-champ-select/v1/session, handler=GameSessionManager().handle_room_session')
 	wllp_get_instance.subscription_filter_endpoint(all_events_subscription, '/lol-champ-select/v1/session', handler=GameSessionManager().handle_room_session)
-
+	print('after /lol-champ-select/v1/session, handler=GameSessionManager().handle_room_session')
 	while True:
 		await asyncio.sleep(10)
 

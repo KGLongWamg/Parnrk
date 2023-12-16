@@ -1,0 +1,65 @@
+
+after /lol-champ-select/v1/session, handler=GameSessionManager().handle_room_session
+当前任务: <Task pending name='Task-279' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-280' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-287' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-288' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-295' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-296' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-333' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-334' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-339' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-340' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-347' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-348' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-389' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-390' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-403' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-404' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-465' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-466' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-473' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-474' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+0
+当前的线程iD==================== 20972
+当前任务: <Task pending name='Task-477' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
+开始等待======================
+当前任务: <Task pending name='Task-478' coro=<GameSessionManager.handle_room_session() running at C:\Users\Administrator\Desktop\code_project\python\become_comtributer\last_time\Parnrk\app\view\Parnrk\subscription.py:96> cb=[_wait.<locals>._on_completion() at H:\coder_tools\anaconda\envs\py38\Lib\asyncio\tasks.py:509]>
