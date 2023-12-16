@@ -245,7 +245,7 @@ class BasicInputInterface(GalleryInterface):
 
         return infos
 
-    # 用于战绩绘图
+    # 用于战绩绘图,有居中，但是我不想要居中
     def display_images(self, scene, page, contexts, a):
         image_size = 35
         space_between = 7
@@ -271,8 +271,8 @@ class BasicInputInterface(GalleryInterface):
                 elif a == 2:
                     textItem = QGraphicsTextItem(context["text"])
                     textItem.setDefaultTextColor(QColor(context["color"]))
-                    textItem.setFont(QFont("Arial", 12, QFont.Bold))
-                    textItem.setPos(x+20, y)
+                    textItem.setFont(QFont("Arial", 9, QFont.Bold))
+                    textItem.setPos(x+5, y)
                     scene.addItem(textItem)
 
         else:

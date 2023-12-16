@@ -131,7 +131,6 @@ class GameSessionManager:
 
 									self.player_data[puuid]['champion_name'] = champion_name
 								else:
-									print('没有champion_name')
 									self.player_data[puuid]={}
 									self.player_data[puuid]['champion_name'] = champion_name
 
