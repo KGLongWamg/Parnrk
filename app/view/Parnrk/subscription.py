@@ -93,7 +93,7 @@ class GameSessionManager:
 		try:
 
 			task = asyncio.current_task()
-			print(f"当前任务: {task}")
+			#print(f"当前任务: {task}")
 			task_repr = str(task)
 
 
@@ -104,11 +104,11 @@ class GameSessionManager:
 			if phase == "GAME_STARTING":
 				match = re.search(r'Task-(\d+)', task_repr)
 				match_int=int(match.group(1))
-				print('match is ',match_int)
+				#print('match is ',match_int)
 				if match_int%2==0:
 					return 
 
-				print('开始等待======================')
+
 				await asyncio.sleep(20)
 
 				async with aiohttp.ClientSession() as session:
@@ -126,20 +126,16 @@ class GameSessionManager:
 								summoner_name = player["summonerName"]
 								puuid_result = await names_get_puuid(summoner_name)
 								puuid = puuid_result[0]["puuid"]
-								#print('puuid is ',puuid)	
 								champion_name = player["championName"]
-								print('game start 英雄名字:',champion_name)
 								if puuid in self.player_data:
-									print('本来有champion_name')
+
 									self.player_data[puuid]['champion_name'] = champion_name
 								else:
 									print('没有champion_name')
 									self.player_data[puuid]={}
 									self.player_data[puuid]['champion_name'] = champion_name
-								print('=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=')
-								for key, value in self.player_data.items():
-									print(key)
-								print('添加到puuid的set成功',champion_name)
+
+								#print('添加到puuid的set成功',champion_name)
 								all_tasks.append(self.fetch_player_data(puuid))
 
 
@@ -161,17 +157,12 @@ class GameSessionManager:
 			gameId = result["gameId"]
 			print(gameId)
 			current_thread = threading.current_thread()
-			print('当前的线程iD====================',current_thread.ident)
 			if gameId in self.processed_sessions:
 				return
 			
-			print('==========================================================================================不然图标了手动停止【======================')
 			self.processed_sessions.add(gameId)  # 添加到processed_sessions = set() 防止重复查询
 			self.gameId = gameId
-			print('I am already here')
-			print('=============================================')
-			print('=============================================')
-			print('=============================================')
+
 			self.cheating_players = {}  # 用于得到通道非本队的名单
 			self.player_data = {}
 
@@ -180,12 +171,10 @@ class GameSessionManager:
 
 			length = len(self.player_data)
 
-			print(f"字典长度: {length}")
-			print('first_time -----------player_data')
+
 
 			for key, value in self.player_data.items():
 				print(key, value)
-			print('first_time -----------player_data')
 			tasks = []
 			for player in myTeam:	
 				puuid = player["puuid"]
@@ -198,7 +187,6 @@ class GameSessionManager:
 			await asyncio.gather(*tasks)
 			print("任务完毕1")
 			self.control_event_1.set()  #玩家信息收集结束
-			print('==========================================================================================手动停止')
 			#return
 			#await self.post_allcrew_to_passage()
 			#await asyncio.sleep(5)
@@ -231,12 +219,10 @@ class GameSessionManager:
 			else:
 				player_info = await summoner_data_fetcher.fetch_player_data(puuid)
 				rank_history =None
-				print(player_info['displayName'],' 不让看战绩')
-			print('player_info')
-			print(player_info)
+
+
 			if puuid not in self.player_data:
 				self.player_data[puuid] = {}
-				print('出问题了')
 			# 将获取到的信息存储在字典中
 			self.player_data[puuid]['player_info'] = player_info     #玩家上方框信息
 			self.player_data[puuid]['rank_history'] = rank_history   #玩家下方框信息
@@ -294,9 +280,8 @@ async def start_subscription():
 	all_events_subscription = await wllp_get_instance.subscribe('OnJsonApiEvent',default_handler=default_message_handler)
 
 	wllp_get_instance.subscription_filter_endpoint(all_events_subscription, '/lol-matchmaking/v1/ready-check', handler=AutoGameSessionController().accept_game_automatically)
-	print('before /lol-champ-select/v1/session, handler=GameSessionManager().handle_room_session')
 	wllp_get_instance.subscription_filter_endpoint(all_events_subscription, '/lol-champ-select/v1/session', handler=GameSessionManager().handle_room_session)
-	print('after /lol-champ-select/v1/session, handler=GameSessionManager().handle_room_session')
+
 	while True:
 		await asyncio.sleep(10)
 
