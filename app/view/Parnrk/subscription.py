@@ -155,7 +155,7 @@ class GameSessionManager:
 
 			
 			gameId = result["gameId"]
-			print(gameId)
+			print('bp对局信息发生了变化')
 			current_thread = threading.current_thread()
 			if gameId in self.processed_sessions:
 				return
@@ -169,16 +169,15 @@ class GameSessionManager:
 			myTeam = result["myTeam"]
 			self.player_data = {player["puuid"]: {} for player in myTeam}
 
-			length = len(self.player_data)
 
 
 
-			for key, value in self.player_data.items():
-				print(key, value)
+
+
 			tasks = []
 			for player in myTeam:	
 				puuid = player["puuid"]
-				print(puuid)
+
 				# 创建协程对象，并加入到任务列表中
 				tasks.append(self.fetch_player_data(puuid))
 

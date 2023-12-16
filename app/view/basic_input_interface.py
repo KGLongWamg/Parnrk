@@ -249,8 +249,8 @@ class BasicInputInterface(GalleryInterface):
     def display_images(self, scene, page, contexts, a):
         image_size = 35
         space_between = 7
-        start_y = 3
-        start_x = 3
+        start_y = 0
+        start_x = 0
 
         if contexts:
             for i, context in enumerate(contexts):
@@ -265,14 +265,14 @@ class BasicInputInterface(GalleryInterface):
                     desired_height = 33
                     pixmap = pixmap.scaled(desired_width, desired_height, Qt.KeepAspectRatio)
                     pixmapItem = QGraphicsPixmapItem(pixmap)
-                    pixmapItem.setPos(x, y)
+                    pixmapItem.setPos(x-30, y)
                     scene.addItem(pixmapItem)
 
                 elif a == 2:
                     textItem = QGraphicsTextItem(context["text"])
                     textItem.setDefaultTextColor(QColor(context["color"]))
                     textItem.setFont(QFont("Arial", 12, QFont.Bold))
-                    textItem.setPos(x, y)
+                    textItem.setPos(x+20, y)
                     scene.addItem(textItem)
 
         else:
