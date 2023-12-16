@@ -49,10 +49,10 @@ class Worker(QObject):
         future = asyncio.run_coroutine_threadsafe(wllp.get_instance(), loop=Thread)
         result = future.result()
         print("开始4")
+        future = asyncio.run_coroutine_threadsafe(subscription.start_subscription(), loop=Thread)
         while True:
             subscription.GameSessionManager().control_event_1.clear()
             print("开始5")
-            future = asyncio.run_coroutine_threadsafe(subscription.start_subscription(), loop=Thread)
             future = asyncio.run_coroutine_threadsafe(subscription.GameSessionManager().control_event_1.wait(),
                                                       loop=Thread)
 
@@ -196,6 +196,7 @@ class BasicInputInterface(GalleryInterface):
                         championId = participants['championId']
                         championId_str = str(championId)
                         championName = self.key_name_dict[championId_str]
+
                         champion_image_path = os.path.join(self.b, 'Parnrk', 'champion_images', f'{championName}.png')
                         champion_image_paths.append(champion_image_path)
                         stats = participants['stats']
@@ -210,7 +211,6 @@ class BasicInputInterface(GalleryInterface):
                 print(f"An error occurred4: {e}")
 
             player_stats_instance.add_player_data(puuid, champion_image_paths, KDA_and_win)
-            #
             self.display_images(getattr(self, f'scene_record{i}'), 0, champion_image_paths, 1)
             self.display_images(getattr(self, f'scene_record{i}'), 0, KDA_and_win, 2)
 
@@ -275,4 +275,10 @@ class BasicInputInterface(GalleryInterface):
                     textItem.setPos(x, y)
                     scene.addItem(textItem)
 
+        else:
+            textItem = QGraphicsTextItem("未使用Parnrk授权或隐私设置")
+            textItem.setDefaultTextColor(QColor("black"))  # 设置默认颜色
+            textItem.setFont(QFont("Arial", 12, QFont.Bold))
+            textItem.setPos(start_x, start_y)
+            scene.addItem(textItem)
 

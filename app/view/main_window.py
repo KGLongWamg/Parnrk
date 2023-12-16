@@ -8,9 +8,7 @@ from qfluentwidgets import (NavigationAvatarWidget, NavigationItemPosition, Mess
 from qfluentwidgets import FluentIcon as FIF
 
 from .gallery_interface import GalleryInterface
-from .home_interface import HomeInterface
 from .basic_input_interface import BasicInputInterface
-from .icon_interface import IconInterface
 
 from .setting_interface import SettingInterface
 
@@ -24,11 +22,11 @@ class MainWindow(FluentWindow):
 
     def __init__(self):
         super().__init__()
+        self.name=None
+        self.uid = None
         self.initWindow()
 
         # create sub interface
-        self.homeInterface = HomeInterface(self)
-        self.iconInterface = IconInterface(self)
         self.basicInputInterface = BasicInputInterface(self)
 
         self.settingInterface = SettingInterface(self)
@@ -51,8 +49,7 @@ class MainWindow(FluentWindow):
     def initNavigation(self):
         # add navigation items
         t = Translator()
-        self.addSubInterface(self.homeInterface, FIF.HOME, self.tr('Home'))
-        self.addSubInterface(self.iconInterface, Icon.EMOJI_TAB_SYMBOLS, t.icons)
+
         #self.navigationInterface.addSeparator()
 
         pos = NavigationItemPosition.SCROLL
@@ -62,7 +59,7 @@ class MainWindow(FluentWindow):
         # add custom widget to bottom
         self.navigationInterface.addWidget(
             routeKey='avatar',
-            widget=NavigationAvatarWidget('uid', ':/gallery/images/shoko.png'),
+            widget=NavigationAvatarWidget(f'uid:{self.uid}', ':/gallery/images/shoko.png'),
             onClick=self.onSupport,
             position=NavigationItemPosition.BOTTOM
         )
@@ -90,7 +87,7 @@ class MainWindow(FluentWindow):
 
     def onSupport(self):
         w = MessageBox("欢迎使用Parnrk",
-            '国服竞技环境变好从这里开始。如有侵权请联系B站KG龙王',
+            '国服竞技环境变好从这里开始。请事请联系B站KG龙王',
             self
         )
         w.yesButton.setText('不得不添加的按钮')

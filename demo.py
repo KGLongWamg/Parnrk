@@ -8,8 +8,7 @@ from PyQt5.QtWidgets import QApplication
 from qfluentwidgets import FluentTranslator
 
 from app.common.config import cfg
-from app.view.main_window import MainWindow
-
+from app.view.login_gui import FormManager
 
 # enable dpi scale
 if cfg.get(cfg.dpiScale) == "Auto":
@@ -36,7 +35,6 @@ app.installTranslator(translator)
 app.installTranslator(galleryTranslator)
 
 # create main window
-w = MainWindow()
-w.show()
+w = FormManager()
 
 app.exec_()
