@@ -87,7 +87,7 @@ class GameSessionManager:
 	def control(self, value):
 		self._control = value
 
-
+	#房间内的消息有变化就会执行
 	async def handle_room_session(self, data):
 
 		try:
@@ -104,9 +104,11 @@ class GameSessionManager:
 			if phase == "GAME_STARTING":
 				match = re.search(r'Task-(\d+)', task_repr)
 				match_int=int(match.group(1))
-				#print('match is ',match_int)
-				if match_int%2==0:
-					return 
+				print('match is ',match_int)
+
+				#下面这个是之前先进对局再开demo会有2个协程同时进，后来没这个问题了
+				#if match_int%2==0:
+				#	return 
 
 
 				await asyncio.sleep(20)
@@ -137,10 +139,11 @@ class GameSessionManager:
 								#print('添加到puuid的set成功',champion_name)
 								all_tasks.append(self.fetch_player_data(puuid))
 
-
-								
+							
 							await asyncio.gather(*all_tasks)
+							print('self.control_event_1.set()')
 							self.control_event_1.set()
+							return
 
 						else:
 							print(f"yes,Error {response.status}: {await response.text()}")
@@ -169,10 +172,6 @@ class GameSessionManager:
 			self.player_data = {player["puuid"]: {} for player in myTeam}
 
 
-
-
-
-
 			tasks = []
 			for player in myTeam:	
 				puuid = player["puuid"]
@@ -181,9 +180,9 @@ class GameSessionManager:
 				tasks.append(self.fetch_player_data(puuid))
 
 			# 并发执行所有任务
-			print("准备执行任务1")
+			print("5个人的显示任务开始等待")
 			await asyncio.gather(*tasks)
-			print("任务完毕1")
+			print("5个人的显示任务完成")
 			self.control_event_1.set()  #玩家信息收集结束
 			#return
 			#await self.post_allcrew_to_passage()
@@ -212,12 +211,15 @@ class GameSessionManager:
 
 			#后面再加入授权过的puuid账号，先测试能跑起来
 			#authorization = await authorization(puuid)
+			'''
 			if privacy == "PUBLIC": #or authorization:
 				player_info, rank_history = await asyncio.gather(player_info_task, rank_history_task)
 			else:
 				player_info = await summoner_data_fetcher.fetch_player_data(puuid)
 				rank_history =None
-
+			'''
+			#先全部检查
+			player_info, rank_history = await asyncio.gather(player_info_task, rank_history_task)
 
 			if puuid not in self.player_data:
 				self.player_data[puuid] = {}
@@ -277,7 +279,7 @@ async def start_subscription():
 	wllp_get_instance = await wllp.get_instance()
 	all_events_subscription = await wllp_get_instance.subscribe('OnJsonApiEvent',default_handler=default_message_handler)
 
-	wllp_get_instance.subscription_filter_endpoint(all_events_subscription, '/lol-matchmaking/v1/ready-check', handler=AutoGameSessionController().accept_game_automatically)
+	#wllp_get_instance.subscription_filter_endpoint(all_events_subscription, '/lol-matchmaking/v1/ready-check', handler=AutoGameSessionController().accept_game_automatically)
 	wllp_get_instance.subscription_filter_endpoint(all_events_subscription, '/lol-champ-select/v1/session', handler=GameSessionManager().handle_room_session)
 
 	while True:

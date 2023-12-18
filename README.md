@@ -35,7 +35,10 @@ pip install pip install -r requriements.txt
 诚邀有能力有意向的朋友一起学习，一起开发
 
 ## 代码大概
-自己写了一个Parnrk包，是用willump和客户端通信，有订阅逻辑。可以先熟悉下，使用了一个单例模式，让willump 以及和服务端通信的client 都运行在一个叫做"Thread"的loop里。
+自己写了一个Parnrk包，是用willump和客户端通信，有订阅逻辑。可以先熟悉下，使用了一个单例模式，让willump 以及和英雄联盟服务端通信的client 都运行在一个叫做"Thread"的loop里。
+
+主线程的worker执行一个异步函数async_task
+
 现在是在用pyqt5写界面，用的是PyQt-Fluent-Widget中的例子界面直接更改过来的，
 "pip install PyQt-Fluent-Widgets[full]"  可pip这个
 
