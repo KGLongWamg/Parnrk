@@ -56,7 +56,6 @@ class Worker(QObject):
                                                       loop=Thread)
             result = future.result()    
             # 发出信号，例如更新UI等
-            print('finished.emit')
             self.finished.emit()
             print('async_task中的循环执行了一次')
             print(' ')
@@ -136,7 +135,6 @@ class BasicInputInterface(GalleryInterface):
         # 清除旧的场景内容
         player_data = subscription.GameSessionManager._instance.player_data
         for i, (puuid, data) in enumerate(player_data.items()):
-            print(f'{i}--------------------')
             getattr(self, f'scene_info{i}').clear()
             getattr(self, f'scene_record{i}').clear()
 
