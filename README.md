@@ -32,9 +32,10 @@ https://github.com/KGLongWamg/Parnrk/archive/refs/heads/main.zip
 pip install pip install -r requriements.txt
 ```
 
-## 已实现的功能
-```
+
+
 3. 运行demo.py
+```
 先打开联盟客户端
 然后在终端中执行
 python demo.py
@@ -46,8 +47,8 @@ python demo.py
 
 ```
 
-## 代码逻辑和流程
-自己写了一个Parnrk包，是用willump和客户端通信，有订阅逻辑。可以先熟悉下，使用了一个单例模式，让willump 以及和英雄联盟服务端通信的client 都运行在一个叫做"Thread"的loop里。
+## 代码逻辑和流程,对参与人员的建议
+自己写了一个Parnrk包，是用willump(https://github.com/elliejs/Willump)和客户端通信，有订阅逻辑。可以先熟悉下，使用了一个单例模式，让willump 以及和英雄联盟服务端通信的client 都运行在一个叫做"Thread"的loop里。
 
 主线程的worker执行一个异步函数async_task，在这个异步函数里持续循环，等待订阅信息的到来更新程序中的显示界面
 
@@ -57,9 +58,19 @@ python demo.py
 我只修改了view 里面的basic_input_interface ，连接了我的Parnrk包，其他的都是原界面例子自带的。
 目前希望把查战绩功能先运行起来，目标是自动查询BP界面战绩，同时匿名化显示数据库剧组。然后进入游戏查询十个人战绩并显示英雄技能
 
+想要参与的小伙伴需要学习以下知识点和框架的使用
+```
+asynico
+pyqt 5
+PyQt-Fluent-Widget
+lcu 	(这部分代码有人会负责，可以不管)
+willump	(这部分代码有人会负责，可以不管)
+```
+大家都是边学边做的，大家都是菜鸡，不懂就问
+
 ## 目前bug
 ```
-代码里有个error4 910 
+代码里有个error4 910 ,会抛出异常，但是没有什么大的影响
 暂时没查出为什么会出现这个问题
 ```
 
