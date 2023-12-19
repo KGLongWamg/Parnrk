@@ -104,7 +104,7 @@ class GameSessionManager:
 			if phase == "GAME_STARTING":
 				match = re.search(r'Task-(\d+)', task_repr)
 				match_int=int(match.group(1))
-				print('match is ',match_int)
+				print('task number is ',match_int)
 
 				#下面这个是之前先进对局再开demo会有2个协程同时进，后来没这个问题了
 				#if match_int%2==0:
@@ -136,12 +136,10 @@ class GameSessionManager:
 									self.player_data[puuid]={}
 									self.player_data[puuid]['champion_name'] = champion_name
 
-								#print('添加到puuid的set成功',champion_name)
 								all_tasks.append(self.fetch_player_data(puuid))
 
 							
 							await asyncio.gather(*all_tasks)
-							print('self.control_event_1.set()')
 							self.control_event_1.set()
 							return
 
@@ -180,9 +178,8 @@ class GameSessionManager:
 				tasks.append(self.fetch_player_data(puuid))
 
 			# 并发执行所有任务
-			print("5个人的显示任务开始等待")
 			await asyncio.gather(*tasks)
-			print("5个人的显示任务完成")
+			print("5个队友的显示任务完成")
 			self.control_event_1.set()  #玩家信息收集结束
 			#return
 			#await self.post_allcrew_to_passage()

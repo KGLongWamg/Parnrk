@@ -157,7 +157,7 @@ class BasicInputInterface(GalleryInterface):
                 tier_ico_path = os.path.join(self.b, 'Parnrk', 'tier_icons', f'{current_tier}.png')
             except Exception as e:
                 print(f"An error occurred2: {e}")
-            print("1-玩家信息获取成功")
+
             #error3是关于段位图标的细节
             try:
                 # name
@@ -189,7 +189,7 @@ class BasicInputInterface(GalleryInterface):
 
             except Exception as e:
                 print(f"An error occurred3: {e}")
-            print("2-玩家段位信息设置成功")
+
             #error4是关于kda的数据更新
             try:
 
@@ -221,14 +221,13 @@ class BasicInputInterface(GalleryInterface):
                         KDA_and_win.append({"text": KDA_win, "color": text_color})
             except Exception as e:
                 print(f"An error occurred4: {e}")
-            print('kda历史数据设置成功')
+
 
 
             player_stats_instance.add_player_data(puuid, champion_image_paths, KDA_and_win)
             self.display_images(getattr(self, f'scene_record{i}'), 0, champion_image_paths, 1)
             self.display_images(getattr(self, f'scene_record{i}'), 0,   KDA_and_win, 2)
-            print('客户端画图成功')
-            print('````````````````````````')
+
             record = getattr(self.record, f'record{i}')
             record.setScene(getattr(self, f'scene_record{i}'))
 
