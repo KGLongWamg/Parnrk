@@ -29,6 +29,9 @@ async def get_player_rank_history(puuid, a, b):
     #只有单双
     #participant_data = {"participants": participants[0], "participantIdentities": participantIdentities[0],"gameCreationDate": gameCreationDate}
     rank_history = await lol_session_manager.rank_history(puuid, a, b)
+
+
+
     return rank_history
 
 

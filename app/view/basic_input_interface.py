@@ -134,127 +134,363 @@ class BasicInputInterface(GalleryInterface):
         print(' ')
         # 清除旧的场景内容
         player_data = subscription.GameSessionManager._instance.player_data
-        for i, (puuid, data) in enumerate(player_data.items()):
 
-
-            getattr(self, f'scene_info{i}').clear()
-            getattr(self, f'scene_record{i}').clear()
-
+        if len(player_data)==10:
+            chaos_team={}
+            order_team={}
+             
+            for puuid, player_info in player_data.items():
+                print(player_info)
+                if player_info['team'] == 'CHAOS':
+                    chaos_team[puuid] = player_info
+                elif player_info['team'] == 'ORDER':
+                    order_team[puuid] = player_info
             
-            #error2 是关于召唤师id，段位图标，段位分数等
-            try:
-                # data 是每个玩家的信息字典
-                # profileicon_path = data['player_info']["profileicon_data"]
-                displayName = data['player_info']["displayName"]
-                print('displayName is ',displayName)
-                puuid = data['player_info']["puuid"]
+            print('chaos team len is ',len(chaos_team))
+            print('order team len is ',len(order_team))
 
-                current_tier = data['player_info']["current_tier"]
-                division = data['player_info']["division"]
-                current_lp = data['player_info']["current_lp"]
-                tier_detail = f"{division}  {current_lp}"
-                info_view = self.get_view('info', 5)
-                scene_info = getattr(self, f'scene_info{i}')
-                tier_ico_path = os.path.join(self.b, 'Parnrk', 'tier_icons', f'{current_tier}.png')
-            except Exception as e:
-                print(f"An error occurred2: {e}")
-
-            #error3是关于段位图标的细节
-            try:
-                # name
-                textItem = QGraphicsTextItem(displayName)
-                textItem.setFont(QFont("Arial", 13, QFont.Bold))
-                textItem.setDefaultTextColor(Qt.black)
-                textItem.setPos(18, 3)  # 设置文本位置
-                scene_info.addItem(textItem)
-
-                # 段位图片
-                pixmap = QPixmap(tier_ico_path)
-                # 缩放图片到指定尺寸
-                desired_width = 55  # 你想要的宽度
-                desired_height = 55  # 你想要的高度
-                scaled_pixmap = pixmap.scaled(desired_width, desired_height, Qt.KeepAspectRatio)
-                pixmapItem = QGraphicsPixmapItem(scaled_pixmap)
-                pixmapItem.setPos(15, 18)  # 设置图片位置
-                scene_info.addItem(pixmapItem)
-
-                # 小段细节
-                textItem = QGraphicsTextItem(tier_detail)
-                textItem.setFont(QFont("Arial", 13, QFont.Bold))
-                textItem.setDefaultTextColor(Qt.black)
-                textItem.setPos(30, 18)  # 设置文本位置
-                scene_info.addItem(textItem)
-
-                info = getattr(self.record, f'info{i}')
-                info.setScene(scene_info)
-
-            except Exception as e:
-                print(f"An error occurred3: {e}")
-
-            #error4是关于kda的数据更新
-            try:
-                #有一种情况，rank_historys是None
-                rank_historys = data['rank_history']
-                champion_image_paths = []
-                KDA_and_win = []
-
-                #这是up原来的代码，错了！is not None 一直是存在的，它是个长度为0的空列表但不是None
-                if rank_historys is  None:
-                    print("\033[91m" + '这个人的rank_historys is None-------------------------'+ "\033[0m")
-
-                    continue
-
-                if len(rank_historys)==0:
-                    print('这个人查到的排位战绩数量是0-------------------------')
-                if len(rank_historys) !=0:
-                    print('len(rank_historys) is ',len(rank_historys))
-                    for rank_history in rank_historys:
-                        participantIdentities = rank_history['participantIdentities']
-                        gameCreationDate = rank_history['gameCreationDate']
-                        gameDate = convert_time_to_string(gameCreationDate)
-                        participants = rank_history['participants']
-                        championId = participants['championId']
-                        championId_str = str(championId)
-                        championName = self.key_name_dict[championId_str]
+            for i, (puuid, data) in enumerate(chaos_team.items()):
+                if data is None:
+                    print("\033[91m" + "data is None" + "\033[0m")
 
 
-                        champion_image_path = os.path.join(self.b, 'Parnrk', 'champion_images', f'{championName}.png')
-                        champion_image_paths.append(champion_image_path)
-                        print('champion_image_path is ',champion_image_path)
-                        stats = participants['stats']
-                        kills = stats['kills']
-                        deaths = stats['deaths']
-                        assists = stats['assists']
+                getattr(self, f'scene_info{i}').clear()
+                getattr(self, f'scene_record{i}').clear()
 
-                        win = "胜利" if stats['win'] else "失败"
-                        text_color = '#00CC00' if win == "胜利" else '#FF0000'
-                        KDA_win = f"{kills}/{deaths}/{assists}\t {gameDate}"    #win本来要添加的
-                        KDA_and_win.append({"text": KDA_win, "color": text_color})
-                print('---------------------------------------------------------------------')
+                
+                #error2 是关于召唤师id，段位图标，段位分数等
+                try:
+                    # data 是每个玩家的信息字典
+                    # profileicon_path = data['player_info']["profileicon_data"]
+                    displayName = data['player_info']["displayName"]
+                    print('displayName is ',displayName)
+                    puuid = data['player_info']["puuid"]
+
+                    current_tier = data['player_info']["current_tier"]
+                    division = data['player_info']["division"]
+                    current_lp = data['player_info']["current_lp"]
+                    tier_detail = f"{division}  {current_lp}"
+                    info_view = self.get_view('info', 5)
+                    scene_info = getattr(self, f'scene_info{i}')
+                    tier_ico_path = os.path.join(self.b, 'Parnrk', 'tier_icons', f'{current_tier}.png')
+                except Exception as e:
+                    print(f"An error occurred2: {e}")
+
+                #error3是关于段位图标的细节
+                try:
+                    # name
+                    textItem = QGraphicsTextItem(displayName)
+                    textItem.setFont(QFont("Arial", 13, QFont.Bold))
+                    textItem.setDefaultTextColor(Qt.black)
+                    textItem.setPos(18, 3)  # 设置文本位置
+                    scene_info.addItem(textItem)
+
+                    # 段位图片
+                    pixmap = QPixmap(tier_ico_path)
+                    # 缩放图片到指定尺寸
+                    desired_width = 55  # 你想要的宽度
+                    desired_height = 55  # 你想要的高度
+                    scaled_pixmap = pixmap.scaled(desired_width, desired_height, Qt.KeepAspectRatio)
+                    pixmapItem = QGraphicsPixmapItem(scaled_pixmap)
+                    pixmapItem.setPos(15, 18)  # 设置图片位置
+                    scene_info.addItem(pixmapItem)
+
+                    # 小段细节
+                    textItem = QGraphicsTextItem(tier_detail)
+                    textItem.setFont(QFont("Arial", 13, QFont.Bold))
+                    textItem.setDefaultTextColor(Qt.black)
+                    textItem.setPos(30, 18)  # 设置文本位置
+                    scene_info.addItem(textItem)
+
+                    info = getattr(self.record, f'info{i}')
+                    info.setScene(scene_info)
+
+                except Exception as e:
+                    print(f"An error occurred3: {e}")
+
+                #error4是关于kda的数据更新
+                try:
+                    #有一种情况，rank_historys是None
+                    rank_historys = data['rank_history']
+                    champion_image_paths = []
+                    KDA_and_win = []
+
+                    #这是up原来的代码，错了！is not None 一直是存在的，它是个长度为0的空列表但不是None
+                    if rank_historys is  None:
+                        print("\033[91m" + '这个人的rank_historys is None-------------------------'+ "\033[0m")
+
+                        continue
+                    print('这个人查到的排位战绩数量是',len(rank_historys))
+                    if len(rank_historys) !=0:
+
+                        for rank_history in rank_historys:
+                            participantIdentities = rank_history['participantIdentities']
+                            gameCreationDate = rank_history['gameCreationDate']
+                            gameDate = convert_time_to_string(gameCreationDate)
+                            participants = rank_history['participants']
+                            championId = participants['championId']
+                            championId_str = str(championId)
+                            championName = self.key_name_dict[championId_str]
 
 
-            except Exception as e:
-                print(f"An error occurred4: {e}")
+                            champion_image_path = os.path.join(self.b, 'Parnrk', 'champion_images', f'{championName}.png')
+                            champion_image_paths.append(champion_image_path)
+                            stats = participants['stats']
+                            kills = stats['kills']
+                            deaths = stats['deaths']
+                            assists = stats['assists']
+
+                            win = "胜利" if stats['win'] else "失败"
+                            text_color = '#00CC00' if win == "胜利" else '#FF0000'
+                            KDA_win = f"{kills}/{deaths}/{assists}\t {gameDate}"    #win本来要添加的
+                            KDA_and_win.append({"text": KDA_win, "color": text_color})
+                    print('---------------------------------------------------------------------')
+
+
+                except Exception as e:
+                    print(f"An error occurred4: {e}")
 
 
 
-            player_stats_instance.add_player_data(puuid, champion_image_paths, KDA_and_win)
-            self.display_images(getattr(self, f'scene_record{i}'), 0, champion_image_paths, 1)
-            self.display_images(getattr(self, f'scene_record{i}'), 0,   KDA_and_win, 2)
+                player_stats_instance.add_player_data(puuid, champion_image_paths, KDA_and_win)
+                self.display_images(getattr(self, f'scene_record{i}'), 0, champion_image_paths, 1)
+                self.display_images(getattr(self, f'scene_record{i}'), 0,   KDA_and_win, 2)
 
-            record = getattr(self.record, f'record{i}')
-            record.setScene(getattr(self, f'scene_record{i}'))
+                record = getattr(self.record, f'record{i}')
+                record.setScene(getattr(self, f'scene_record{i}'))
 
+            for i, (puuid, data) in enumerate(order_team.items()):
+                if data is None:
+                    print("\033[91m" + "data is None" + "\033[0m")
+
+
+                getattr(self, f'scene_info{i+5}').clear()
+                getattr(self, f'scene_record{i+5}').clear()
+
+                
+                #error2 是关于召唤师id，段位图标，段位分数等
+                try:
+                    # data 是每个玩家的信息字典
+                    # profileicon_path = data['player_info']["profileicon_data"]
+                    displayName = data['player_info']["displayName"]
+                    print('displayName is ',displayName)
+                    puuid = data['player_info']["puuid"]
+
+                    current_tier = data['player_info']["current_tier"]
+                    division = data['player_info']["division"]
+                    current_lp = data['player_info']["current_lp"]
+                    tier_detail = f"{division}  {current_lp}"
+                    info_view = self.get_view('info', 5)
+                    scene_info = getattr(self, f'scene_info{i+5}')
+                    tier_ico_path = os.path.join(self.b, 'Parnrk', 'tier_icons', f'{current_tier}.png')
+                except Exception as e:
+                    print(f"An error occurred2: {e}")
+
+                #error3是关于段位图标的细节
+                try:
+                    # name
+                    textItem = QGraphicsTextItem(displayName)
+                    textItem.setFont(QFont("Arial", 13, QFont.Bold))
+                    textItem.setDefaultTextColor(Qt.black)
+                    textItem.setPos(18, 3)  # 设置文本位置
+                    scene_info.addItem(textItem)
+
+                    # 段位图片
+                    pixmap = QPixmap(tier_ico_path)
+                    # 缩放图片到指定尺寸
+                    desired_width = 55  # 你想要的宽度
+                    desired_height = 55  # 你想要的高度
+                    scaled_pixmap = pixmap.scaled(desired_width, desired_height, Qt.KeepAspectRatio)
+                    pixmapItem = QGraphicsPixmapItem(scaled_pixmap)
+                    pixmapItem.setPos(15, 18)  # 设置图片位置
+                    scene_info.addItem(pixmapItem)
+
+                    # 小段细节
+                    textItem = QGraphicsTextItem(tier_detail)
+                    textItem.setFont(QFont("Arial", 13, QFont.Bold))
+                    textItem.setDefaultTextColor(Qt.black)
+                    textItem.setPos(30, 18)  # 设置文本位置
+                    scene_info.addItem(textItem)
+
+                    info = getattr(self.record, f'info{i+5}')
+                    info.setScene(scene_info)
+
+                except Exception as e:
+                    print(f"An error occurred3: {e}")
+
+                #error4是关于kda的数据更新
+                try:
+                    #有一种情况，rank_historys是None
+                    rank_historys = data['rank_history']
+                    champion_image_paths = []
+                    KDA_and_win = []
+
+                    #这是up原来的代码，错了！is not None 一直是存在的，它是个长度为0的空列表但不是None
+                    if rank_historys is  None:
+                        print("\033[91m" + '这个人的rank_historys is None-------------------------'+ "\033[0m")
+
+                        continue
+                    print('这个人查到的排位战绩数量是',len(rank_historys))
+                    if len(rank_historys) !=0:
+
+                        for rank_history in rank_historys:
+                            participantIdentities = rank_history['participantIdentities']
+                            gameCreationDate = rank_history['gameCreationDate']
+                            gameDate = convert_time_to_string(gameCreationDate)
+                            participants = rank_history['participants']
+                            championId = participants['championId']
+                            championId_str = str(championId)
+                            championName = self.key_name_dict[championId_str]
+
+
+                            champion_image_path = os.path.join(self.b, 'Parnrk', 'champion_images', f'{championName}.png')
+                            champion_image_paths.append(champion_image_path)
+                            stats = participants['stats']
+                            kills = stats['kills']
+                            deaths = stats['deaths']
+                            assists = stats['assists']
+
+                            win = "胜利" if stats['win'] else "失败"
+                            text_color = '#00CC00' if win == "胜利" else '#FF0000'
+                            KDA_win = f"{kills}/{deaths}/{assists}\t {gameDate}"    #win本来要添加的
+                            KDA_and_win.append({"text": KDA_win, "color": text_color})
+                    print('---------------------------------------------------------------------')
+
+
+                except Exception as e:
+                    print(f"An error occurred4: {e}")
+
+
+
+                player_stats_instance.add_player_data(puuid, champion_image_paths, KDA_and_win)
+                self.display_images(getattr(self, f'scene_record{i+5}'), 0, champion_image_paths, 1)
+                self.display_images(getattr(self, f'scene_record{i+5}'), 0,   KDA_and_win, 2)
+
+                record = getattr(self.record, f'record{i+5}')
+                record.setScene(getattr(self, f'scene_record{i+5}'))
+            
+            
+        else:
+            for i, (puuid, data) in enumerate(player_data.items()):
+                if data is None:
+                    print("\033[91m" + "data is None" + "\033[0m")
+
+
+                getattr(self, f'scene_info{i}').clear()
+                getattr(self, f'scene_record{i}').clear()
+
+                
+                #error2 是关于召唤师id，段位图标，段位分数等
+                try:
+                    # data 是每个玩家的信息字典
+                    # profileicon_path = data['player_info']["profileicon_data"]
+                    displayName = data['player_info']["displayName"]
+                    print('displayName is ',displayName)
+                    puuid = data['player_info']["puuid"]
+
+                    current_tier = data['player_info']["current_tier"]
+                    division = data['player_info']["division"]
+                    current_lp = data['player_info']["current_lp"]
+                    tier_detail = f"{division}  {current_lp}"
+                    info_view = self.get_view('info', 5)
+                    scene_info = getattr(self, f'scene_info{i}')
+                    tier_ico_path = os.path.join(self.b, 'Parnrk', 'tier_icons', f'{current_tier}.png')
+                except Exception as e:
+                    print(f"An error occurred2: {e}")
+
+                #error3是关于段位图标的细节
+                try:
+                    # name
+                    textItem = QGraphicsTextItem(displayName)
+                    textItem.setFont(QFont("Arial", 13, QFont.Bold))
+                    textItem.setDefaultTextColor(Qt.black)
+                    textItem.setPos(18, 3)  # 设置文本位置
+                    scene_info.addItem(textItem)
+
+                    # 段位图片
+                    pixmap = QPixmap(tier_ico_path)
+                    # 缩放图片到指定尺寸
+                    desired_width = 55  # 你想要的宽度
+                    desired_height = 55  # 你想要的高度
+                    scaled_pixmap = pixmap.scaled(desired_width, desired_height, Qt.KeepAspectRatio)
+                    pixmapItem = QGraphicsPixmapItem(scaled_pixmap)
+                    pixmapItem.setPos(15, 18)  # 设置图片位置
+                    scene_info.addItem(pixmapItem)
+
+                    # 小段细节
+                    textItem = QGraphicsTextItem(tier_detail)
+                    textItem.setFont(QFont("Arial", 13, QFont.Bold))
+                    textItem.setDefaultTextColor(Qt.black)
+                    textItem.setPos(30, 18)  # 设置文本位置
+                    scene_info.addItem(textItem)
+
+                    info = getattr(self.record, f'info{i}')
+                    info.setScene(scene_info)
+
+                except Exception as e:
+                    print(f"An error occurred3: {e}")
+
+                #error4是关于kda的数据更新
+                try:
+                    #有一种情况，rank_historys是None
+                    rank_historys = data['rank_history']
+                    champion_image_paths = []
+                    KDA_and_win = []
+
+                    #这是up原来的代码，错了！is not None 一直是存在的，它是个长度为0的空列表但不是None
+                    if rank_historys is  None:
+                        print("\033[91m" + '这个人的rank_historys is None-------------------------'+ "\033[0m")
+
+                        continue
+                    print('这个人查到的排位战绩数量是',len(rank_historys))
+                    if len(rank_historys) !=0:
+
+                        for rank_history in rank_historys:
+                            participantIdentities = rank_history['participantIdentities']
+                            gameCreationDate = rank_history['gameCreationDate']
+                            gameDate = convert_time_to_string(gameCreationDate)
+                            participants = rank_history['participants']
+                            championId = participants['championId']
+                            championId_str = str(championId)
+                            championName = self.key_name_dict[championId_str]
+
+
+                            champion_image_path = os.path.join(self.b, 'Parnrk', 'champion_images', f'{championName}.png')
+                            champion_image_paths.append(champion_image_path)
+                            stats = participants['stats']
+                            kills = stats['kills']
+                            deaths = stats['deaths']
+                            assists = stats['assists']
+
+                            win = "胜利" if stats['win'] else "失败"
+                            text_color = '#00CC00' if win == "胜利" else '#FF0000'
+                            KDA_win = f"{kills}/{deaths}/{assists}\t {gameDate}"    #win本来要添加的
+                            KDA_and_win.append({"text": KDA_win, "color": text_color})
+                    print('---------------------------------------------------------------------')
+
+
+                except Exception as e:
+                    print(f"An error occurred4: {e}")
+
+
+
+                player_stats_instance.add_player_data(puuid, champion_image_paths, KDA_and_win)
+                self.display_images(getattr(self, f'scene_record{i}'), 0, champion_image_paths, 1)
+                self.display_images(getattr(self, f'scene_record{i}'), 0,   KDA_and_win, 2)
+
+                record = getattr(self.record, f'record{i}')
+                record.setScene(getattr(self, f'scene_record{i}'))
+            
         texts = []
         for i, (puuid, data) in enumerate(player_data.items()):
             if 'cheating_info' in data:
                 cheating_info = data['cheating_info']
                 evidence_url = cheating_info['evidence_url']
-                sub_type = cheating_info['sub_type']
+                sub_type = cheating_info['sub_type']    
 
                 text = f"剧组:{sub_type} 证据地址：{evidence_url}"
                 texts.append(text)
-
+    
         cheating_scene = QGraphicsScene()
         combined_text = "\t".join(texts)
         text_item = QGraphicsTextItem(combined_text)
@@ -304,7 +540,7 @@ class BasicInputInterface(GalleryInterface):
                     scene.addItem(textItem)
 
         else:
-            textItem = QGraphicsTextItem("未使用Parnrk授权或隐私设置")
+            textItem = QGraphicsTextItem("最近50把没有排位")
             textItem.setDefaultTextColor(QColor("black"))  # 设置默认颜色
             textItem.setFont(QFont("Arial", 12, QFont.Bold))
             textItem.setPos(start_x, start_y)

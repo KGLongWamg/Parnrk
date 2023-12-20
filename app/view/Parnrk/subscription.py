@@ -5,6 +5,7 @@ import aiohttp
 import threading
 import re
 
+
 from .utils.Singleton import wllp
 from .model.api_client_manager import APIClient
 from . import summoner_data_fetcher
@@ -111,7 +112,7 @@ class GameSessionManager:
 				#	return 
 
 
-				await asyncio.sleep(20)
+				await asyncio.sleep(25)
 
 				async with aiohttp.ClientSession() as session:
 
@@ -132,9 +133,11 @@ class GameSessionManager:
 								if puuid in self.player_data:
 
 									self.player_data[puuid]['champion_name'] = champion_name
+									self.player_data[puuid]['team']			=player["team"]
 								else:
 									self.player_data[puuid]={}
 									self.player_data[puuid]['champion_name'] = champion_name
+									self.player_data[puuid]['team']			=player["team"]
 
 								all_tasks.append(self.fetch_player_data(puuid))
 
@@ -167,6 +170,7 @@ class GameSessionManager:
 			self.player_data = {}
 
 			myTeam = result["myTeam"]
+
 			self.player_data = {player["puuid"]: {} for player in myTeam}
 
 
@@ -203,9 +207,10 @@ class GameSessionManager:
 		try:
 			player_info_task = summoner_data_fetcher.fetch_player_data(puuid)
 			#这里查询puuid是否可用，是否在某个数据库，或者是否公开隐私设置，或者是否
-			displayName, profileIconId, puuid, privacy = await summoner_data_fetcher.get_player_details(puuid)
+			#这里很奇怪，为什么充值puuid
+			#displayName, profileIconId, puuid, privacy = await summoner_data_fetcher.get_player_details(puuid)
 			rank_history_task = summoner_data_fetcher.get_player_rank_history(puuid, 0, 50)
-
+			#print(displayName ,'  ',profileIconId,'  ',privacy)
 			#后面再加入授权过的puuid账号，先测试能跑起来
 			#authorization = await authorization(puuid)
 			'''

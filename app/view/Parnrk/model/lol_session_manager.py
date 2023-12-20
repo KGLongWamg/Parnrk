@@ -80,21 +80,14 @@ async def room_session():
 # 战绩
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(1))
 async def rank_history(puuid, a, b):
+    #这一行有问题
     session_data = await (await ((await wllp.get_instance()).request("GET",f"/lol-match-history/v1/products/lol/{puuid}/matches?begIndex={a}&endIndex={b}"))).json()
     # accountId= games["accountId"]   这个暂时不需要
-
+    while not session_data.get("games"):
+        session_data = await (await ((await wllp.get_instance()).request("GET",f"/lol-match-history/v1/products/lol/{puuid}/matches?begIndex={a}&endIndex={b}"))).json()
     player_infos =[]
     if session_data.get("games"):
         games = session_data["games"]["games"]
-
-        print(len(games))
-        if len(games)!=51:
-            #会进入这里的一般是长度低于51把的
-            print(f'accountId is', session_data['accountId'])
-            print('len(games) is ',len(games))
-            print('重大异常，没有拿到51把数据')
-
-
         if games:
             have_rank=False
             for game in games:
@@ -112,12 +105,17 @@ async def rank_history(puuid, a, b):
                     player_infos.append(participant_data)
                 else:
                     continue
-        if player_info is None:
-            print(session_data['accountId'])
+
+
             if have_rank == False:
-                print("这个人没有内容是因为他最近没打过排位")
+                print('--------puuid----------')
+                print(puuid)
+                print("这个人没有内容是因为他最近50把游戏没打过单双排")
 
 
+        return player_infos
+    else:
+        print('session_data.get("games")  False')
         return player_infos
 
 # 用于房间信息的 player
