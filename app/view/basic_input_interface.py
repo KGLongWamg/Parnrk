@@ -39,7 +39,6 @@ class Worker(QObject):
         # 为当前线程创建并设置新的事件循环
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        print("开始执行async_task")
         # 在新的事件循环中运行异步任务
         loop.run_until_complete(self.async_task())
         loop.close()
@@ -57,8 +56,7 @@ class Worker(QObject):
             result = future.result()    
             # 发出信号，例如更新UI等
             self.finished.emit()
-            print('async_task中的循环执行了一次')
-            print(' ')
+
 
 
 
@@ -130,8 +128,7 @@ class BasicInputInterface(GalleryInterface):
     #从player_data提取数据更新到pyqt中的各个widget进行画图
     @pyqtSlot()
     def update_player_stats(self):
-        print("一次循环结束，finished.emit,执行update_player_stats更新界面内容")
-        print(' ')
+
         # 清除旧的场景内容
         player_data = subscription.GameSessionManager._instance.player_data
 
@@ -140,18 +137,15 @@ class BasicInputInterface(GalleryInterface):
             order_team={}
              
             for puuid, player_info in player_data.items():
-                print(player_info)
                 if player_info['team'] == 'CHAOS':
                     chaos_team[puuid] = player_info
                 elif player_info['team'] == 'ORDER':
                     order_team[puuid] = player_info
             
-            print('chaos team len is ',len(chaos_team))
-            print('order team len is ',len(order_team))
+
 
             for i, (puuid, data) in enumerate(chaos_team.items()):
-                if data is None:
-                    print("\033[91m" + "data is None" + "\033[0m")
+
 
 
                 getattr(self, f'scene_info{i}').clear()
@@ -163,7 +157,6 @@ class BasicInputInterface(GalleryInterface):
                     # data 是每个玩家的信息字典
                     # profileicon_path = data['player_info']["profileicon_data"]
                     displayName = data['player_info']["displayName"]
-                    print('displayName is ',displayName)
                     puuid = data['player_info']["puuid"]
 
                     current_tier = data['player_info']["current_tier"]
@@ -215,12 +208,7 @@ class BasicInputInterface(GalleryInterface):
                     champion_image_paths = []
                     KDA_and_win = []
 
-                    #这是up原来的代码，错了！is not None 一直是存在的，它是个长度为0的空列表但不是None
-                    if rank_historys is  None:
-                        print("\033[91m" + '这个人的rank_historys is None-------------------------'+ "\033[0m")
 
-                        continue
-                    print('这个人查到的排位战绩数量是',len(rank_historys))
                     if len(rank_historys) !=0:
 
                         for rank_history in rank_historys:
@@ -244,7 +232,7 @@ class BasicInputInterface(GalleryInterface):
                             text_color = '#00CC00' if win == "胜利" else '#FF0000'
                             KDA_win = f"{kills}/{deaths}/{assists}\t {gameDate}"    #win本来要添加的
                             KDA_and_win.append({"text": KDA_win, "color": text_color})
-                    print('---------------------------------------------------------------------')
+
 
 
                 except Exception as e:
@@ -260,8 +248,7 @@ class BasicInputInterface(GalleryInterface):
                 record.setScene(getattr(self, f'scene_record{i}'))
 
             for i, (puuid, data) in enumerate(order_team.items()):
-                if data is None:
-                    print("\033[91m" + "data is None" + "\033[0m")
+
 
 
                 getattr(self, f'scene_info{i+5}').clear()
@@ -273,7 +260,6 @@ class BasicInputInterface(GalleryInterface):
                     # data 是每个玩家的信息字典
                     # profileicon_path = data['player_info']["profileicon_data"]
                     displayName = data['player_info']["displayName"]
-                    print('displayName is ',displayName)
                     puuid = data['player_info']["puuid"]
 
                     current_tier = data['player_info']["current_tier"]
@@ -325,12 +311,7 @@ class BasicInputInterface(GalleryInterface):
                     champion_image_paths = []
                     KDA_and_win = []
 
-                    #这是up原来的代码，错了！is not None 一直是存在的，它是个长度为0的空列表但不是None
-                    if rank_historys is  None:
-                        print("\033[91m" + '这个人的rank_historys is None-------------------------'+ "\033[0m")
 
-                        continue
-                    print('这个人查到的排位战绩数量是',len(rank_historys))
                     if len(rank_historys) !=0:
 
                         for rank_history in rank_historys:
@@ -354,7 +335,7 @@ class BasicInputInterface(GalleryInterface):
                             text_color = '#00CC00' if win == "胜利" else '#FF0000'
                             KDA_win = f"{kills}/{deaths}/{assists}\t {gameDate}"    #win本来要添加的
                             KDA_and_win.append({"text": KDA_win, "color": text_color})
-                    print('---------------------------------------------------------------------')
+
 
 
                 except Exception as e:
@@ -372,8 +353,7 @@ class BasicInputInterface(GalleryInterface):
             
         else:
             for i, (puuid, data) in enumerate(player_data.items()):
-                if data is None:
-                    print("\033[91m" + "data is None" + "\033[0m")
+
 
 
                 getattr(self, f'scene_info{i}').clear()
@@ -385,7 +365,6 @@ class BasicInputInterface(GalleryInterface):
                     # data 是每个玩家的信息字典
                     # profileicon_path = data['player_info']["profileicon_data"]
                     displayName = data['player_info']["displayName"]
-                    print('displayName is ',displayName)
                     puuid = data['player_info']["puuid"]
 
                     current_tier = data['player_info']["current_tier"]
@@ -437,12 +416,6 @@ class BasicInputInterface(GalleryInterface):
                     champion_image_paths = []
                     KDA_and_win = []
 
-                    #这是up原来的代码，错了！is not None 一直是存在的，它是个长度为0的空列表但不是None
-                    if rank_historys is  None:
-                        print("\033[91m" + '这个人的rank_historys is None-------------------------'+ "\033[0m")
-
-                        continue
-                    print('这个人查到的排位战绩数量是',len(rank_historys))
                     if len(rank_historys) !=0:
 
                         for rank_history in rank_historys:
@@ -466,7 +439,6 @@ class BasicInputInterface(GalleryInterface):
                             text_color = '#00CC00' if win == "胜利" else '#FF0000'
                             KDA_win = f"{kills}/{deaths}/{assists}\t {gameDate}"    #win本来要添加的
                             KDA_and_win.append({"text": KDA_win, "color": text_color})
-                    print('---------------------------------------------------------------------')
 
 
                 except Exception as e:

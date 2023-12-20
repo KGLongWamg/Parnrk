@@ -103,9 +103,8 @@ class GameSessionManager:
 			result = data["data"]
 			phase = result["timer"]["phase"]
 			if phase == "GAME_STARTING":
-				match = re.search(r'Task-(\d+)', task_repr)
-				match_int=int(match.group(1))
-				print('task number is ',match_int)
+				#match = re.search(r'Task-(\d+)', task_repr)
+				#match_int=int(match.group(1))
 
 				#下面这个是之前先进对局再开demo会有2个协程同时进，后来没这个问题了
 				#if match_int%2==0:
