@@ -87,21 +87,37 @@ async def rank_history(puuid, a, b):
     if session_data.get("games"):
         games = session_data["games"]["games"]
 
+        print(len(games))
+        if len(games)!=51:
+            #会进入这里的一般是长度低于51把的
+            print(f'accountId is', session_data['accountId'])
+            print('len(games) is ',len(games))
+            print('重大异常，没有拿到51把数据')
+
+
         if games:
+            have_rank=False
             for game in games:
                 queueId = game["queueId"]
                 if queueId == 420:
+                    have_rank=True
                     # gameId=game["gameId"]   暂时没有意义
 
                     gameCreationDate = game["gameCreationDate"]
                     participants = game["participants"]  # 获得KDA  和英雄ID  以及team
-                    participantIdentities = game["participantIdentities"]  # 获得查询的这个人的信息 主要用于显示 summonerName
+                    participantIdentities = game["participantIdentities"]  # 获得查询的这个人的信息 主要用于 显示 summonerName
 
                     participant_data = {"participants": participants[0], "participantIdentities": participantIdentities[0],"gameCreationDate": gameCreationDate}
 
                     player_infos.append(participant_data)
                 else:
                     continue
+        if player_info is None:
+            print(session_data['accountId'])
+            if have_rank == False:
+                print("这个人没有内容是因为他最近没打过排位")
+
+
         return player_infos
 
 # 用于房间信息的 player

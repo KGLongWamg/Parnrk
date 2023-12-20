@@ -50,7 +50,7 @@ python demo.py
 ```
 
 ## 代码逻辑和流程,对参与人员的建议
-自己写了一个Parnrk包，是用willump(https://github.com/elliejs/Willump)和客户端通信，有订阅逻辑。可以先熟悉下，使用了一个单例模式，让willump 以及和英雄联盟服务端通信的client 都运行在一个叫做"Thread"的loop里。
+自己写了一个Parnrk包，是用willump  https://github.com/elliejs/Willump  和客户端通信，有订阅逻辑。可以先熟悉下，使用了一个单例模式，让willump 以及和英雄联盟服务端通信的client 都运行在一个叫做"Thread"的loop里。
 
 主线程的worker执行一个异步函数async_task，在这个异步函数里持续循环，等待订阅信息的到来更新程序中的显示界面
 
@@ -80,6 +80,16 @@ willump	(这部分代码有人会负责，可以不管)
 登陆界面登陆时会跳出3个界面，还没改
 ```
 
+
+```
+QPixmap::scaled: Pixmap is a null pixmap
+终端有个qt的类似于警告的内容，目前没什么影响
+```
+
+
+```
+有时候获取战绩会出错，得到None的数据
+```
 
 ## 将要实现的功能（待实现，不完全）
 ```

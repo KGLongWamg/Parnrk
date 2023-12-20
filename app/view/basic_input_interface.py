@@ -135,6 +135,8 @@ class BasicInputInterface(GalleryInterface):
         # 清除旧的场景内容
         player_data = subscription.GameSessionManager._instance.player_data
         for i, (puuid, data) in enumerate(player_data.items()):
+
+
             getattr(self, f'scene_info{i}').clear()
             getattr(self, f'scene_record{i}').clear()
 
@@ -144,6 +146,7 @@ class BasicInputInterface(GalleryInterface):
                 # data 是每个玩家的信息字典
                 # profileicon_path = data['player_info']["profileicon_data"]
                 displayName = data['player_info']["displayName"]
+                print('displayName is ',displayName)
                 puuid = data['player_info']["puuid"]
 
                 current_tier = data['player_info']["current_tier"]
@@ -190,12 +193,21 @@ class BasicInputInterface(GalleryInterface):
 
             #error4是关于kda的数据更新
             try:
-
+                #有一种情况，rank_historys是None
                 rank_historys = data['rank_history']
                 champion_image_paths = []
                 KDA_and_win = []
 
-                if rank_historys is not None:
+                #这是up原来的代码，错了！is not None 一直是存在的，它是个长度为0的空列表但不是None
+                if rank_historys is  None:
+                    print("\033[91m" + '这个人的rank_historys is None-------------------------'+ "\033[0m")
+
+                    continue
+
+                if len(rank_historys)==0:
+                    print('这个人查到的排位战绩数量是0-------------------------')
+                if len(rank_historys) !=0:
+                    print('len(rank_historys) is ',len(rank_historys))
                     for rank_history in rank_historys:
                         participantIdentities = rank_history['participantIdentities']
                         gameCreationDate = rank_history['gameCreationDate']
@@ -208,6 +220,7 @@ class BasicInputInterface(GalleryInterface):
 
                         champion_image_path = os.path.join(self.b, 'Parnrk', 'champion_images', f'{championName}.png')
                         champion_image_paths.append(champion_image_path)
+                        print('champion_image_path is ',champion_image_path)
                         stats = participants['stats']
                         kills = stats['kills']
                         deaths = stats['deaths']
@@ -217,6 +230,9 @@ class BasicInputInterface(GalleryInterface):
                         text_color = '#00CC00' if win == "胜利" else '#FF0000'
                         KDA_win = f"{kills}/{deaths}/{assists}\t {gameDate}"    #win本来要添加的
                         KDA_and_win.append({"text": KDA_win, "color": text_color})
+                print('---------------------------------------------------------------------')
+
+
             except Exception as e:
                 print(f"An error occurred4: {e}")
 
