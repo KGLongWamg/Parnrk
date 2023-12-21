@@ -50,7 +50,7 @@ class Worker(QObject):
 
         while True:
             subscription.GameSessionManager().control_event_1.clear()
-            print("control_event_1.clear  开始wait 房间里的信息更新")
+            print("control_event_1.clear  开始等待 房间里的信息更新")
             future = asyncio.run_coroutine_threadsafe(subscription.GameSessionManager().control_event_1.wait(),
                                                       loop=Thread)
             result = future.result()    
@@ -111,7 +111,7 @@ class BasicInputInterface(GalleryInterface):
         self.record = uic.loadUi(ui_path)
 
         self.addExampleCard("对局战绩", self.record.record_module, "1", stretch=1)
-
+        #在界面创建10个QGraphicsScene
         for i in range(10):
             setattr(self, f'scene_info{i}', QGraphicsScene())
             setattr(self, f'scene_record{i}', QGraphicsScene())

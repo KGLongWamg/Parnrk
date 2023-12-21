@@ -2,4 +2,5 @@ some_record
 app/view/Parnrk/__pycache__
 app/view/Parnrk/model/__pycache__
 app/view/__pycache__
+app/resource
 *.txt
