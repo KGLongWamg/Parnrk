@@ -21,6 +21,7 @@ from ..common import resource
 class MainWindow(FluentWindow):
 
     def __init__(self):
+        print('进入MainWindow()')
         super().__init__()
         self.name=None
         self.uid = None

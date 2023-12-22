@@ -54,16 +54,16 @@ class FormManager(QtWidgets.QWidget):
         self.register_form.show()
         self.login_form.hide()
 
-class MyLoginForm(QtWidgets.QWidget, Ui_Form, Ui_Form2):
+class MyLoginForm(QtWidgets.QWidget, Ui_Form):
     show_register_form_signal = pyqtSignal()
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
 
-        self.login_button.clicked.connect(self.on_login_button_clicked)
+        self.login_button.clicked.connect(self.login_button_clicked)
         self.register_button.clicked.connect(self.show_register_form_signal.emit)
-
+        '''
         self.session_cookie = client._instance.cookies
         if self.session_cookie:
             try:
@@ -79,7 +79,9 @@ class MyLoginForm(QtWidgets.QWidget, Ui_Form, Ui_Form2):
                     main_form.uid = uid
             except Exception as e:
                 QMessageBox.information(self, "登录过期", "登录信息过期，请重新登录")
-    def on_login_button_clicked(self):
+        '''
+    def login_button_clicked(self):
+        print('进入on_login_button_clicked')
         username = self.uesrname_lineedit.text()
         password = self.password_lineedit.text()
         captcha = self.captcha_lineedit.text() or None
@@ -89,7 +91,7 @@ class MyLoginForm(QtWidgets.QWidget, Ui_Form, Ui_Form2):
         if response1.get('status') == 200:
             QMessageBox.information(self, "登录成功", "登录成功！")
             self.hide()
-            main_form = MainWindow()
+            MainWindow()
         else:
             failed_attempts = response1.get('failed_attempts')
             if failed_attempts >= 8:
@@ -106,6 +108,7 @@ class MyLoginForm(QtWidgets.QWidget, Ui_Form, Ui_Form2):
                 captcha_Label.setPixmap(pixmap)
             print(response1)
             QMessageBox.information(self, "info", response1.get('message'))
+        print('on_login_button_clicked函数结束')
 
 class MyRegisterForm(QtWidgets.QWidget, Ui_Form2):
     show_login_form_signal = pyqtSignal()
@@ -113,10 +116,10 @@ class MyRegisterForm(QtWidgets.QWidget, Ui_Form2):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.register_button.clicked.connect(self.on_register_button_clicked)
+        self.register_button.clicked.connect(self.register_button_clicked)
         self.login_button.clicked.connect(self.show_login_form_signal.emit)
 
-    def on_register_button_clicked(self):
+    def register_button_clicked(self):
         username = self.uesrname_lineedit.text()
         password = self.password_lineedit.text()
         verify_password = self.verify_password_lineedit.text()
